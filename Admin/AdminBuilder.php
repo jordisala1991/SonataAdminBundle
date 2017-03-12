@@ -22,7 +22,7 @@ use Symfony\Component\PropertyAccess\PropertyPath;
 /**
  * @author Christian Gripp <mail@core23.de>
  */
-final class AdminBuilder implements FormBuilderInterface, DatagridBuilderInterface
+final class AdminBuilder implements AdminBuilderInterface
 {
     /**
      * @var ShowBuilderInterface
@@ -94,7 +94,7 @@ final class AdminBuilder implements FormBuilderInterface, DatagridBuilderInterfa
     public function getShowForm(AdminInterface $admin)
     {
         $show = new FieldDescriptionCollection();
-        $mapper = new ShowMapper($admin->getShowBuilder(), $show, $admin);
+        $mapper = new ShowMapper($this->showBuilder, $show, $admin);
 
         // NEXT_MAJOR: increase visiblity of configureShowFields method
         $reflection = new \ReflectionMethod($admin, 'configureShowFields');
@@ -131,11 +131,11 @@ final class AdminBuilder implements FormBuilderInterface, DatagridBuilderInterfa
         }
 
         // initialize the datagrid
-        $datagrid = $admin->getDatagridBuilder()->getBaseDatagrid($admin, $filterParameters);
+        $datagrid = $this->datagridBuilder->getBaseDatagrid($admin, $filterParameters);
 
         $datagrid->getPager()->setMaxPageLinks($admin->getMaxPageLinks());
 
-        $mapper = new DatagridMapper($admin->getDatagridBuilder(), $datagrid, $admin);
+        $mapper = new DatagridMapper($this->datagridBuilder, $datagrid, $admin);
 
         // build the datagrid filter
 
@@ -181,9 +181,9 @@ final class AdminBuilder implements FormBuilderInterface, DatagridBuilderInterfa
      */
     public function getList(AdminInterface $admin)
     {
-        $list = $admin->getListBuilder()->getBaseList();
+        $list = $this->listBuilder->getBaseList();
 
-        $mapper = new ListMapper($admin->getListBuilder(), $list, $admin);
+        $mapper = new ListMapper($this->listBuilder, $list, $admin);
 
         if (count($admin->getBatchActions()) > 0) {
             $fieldDescription = $admin->getModelManager()->getNewFieldDescriptionInstance($admin->getClass(), 'batch', array(

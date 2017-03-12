@@ -1490,6 +1490,14 @@ class AdminTest extends PHPUnit_Framework_TestCase
     {
         $modelAdmin = new ModelAdmin('sonata.post.admin.model', 'Application\Sonata\FooBundle\Entity\Model', 'SonataFooBundle:ModelAdmin');
 
+        $showBuilder = $this->createMock('Sonata\AdminBundle\Builder\ShowBuilderInterface');
+        $listBuilder = $this->createMock('Sonata\AdminBundle\Builder\ListBuilderInterface');
+        $datagridBuilder = $this->createMock('Sonata\AdminBundle\Builder\DatagridBuilderInterface');
+
+        $modelAdmin->setShowBuilder($showBuilder);
+        $modelAdmin->setListBuilder($listBuilder);
+        $modelAdmin->setDatagridBuilder($datagridBuilder);
+
         $fooFieldDescription = new FieldDescription();
         $barFieldDescription = new FieldDescription();
         $bazFieldDescription = new FieldDescription();
@@ -2042,6 +2050,10 @@ class AdminTest extends PHPUnit_Framework_TestCase
         $formBuilder = $this->createMock('Symfony\Component\Form\FormBuilderInterface');
         $formBuilder->expects($this->any())->method('getForm')->will($this->returnValue(null));
 
+        $showBuilder = $this->createMock('Sonata\AdminBundle\Builder\ShowBuilderInterface');
+        $listBuilder = $this->createMock('Sonata\AdminBundle\Builder\ListBuilderInterface');
+        $datagridBuilder = $this->createMock('Sonata\AdminBundle\Builder\DatagridBuilderInterface');
+
         $tagAdmin = $this->getMockBuilder('Sonata\AdminBundle\Tests\Fixtures\Admin\TagAdmin')
             ->setConstructorArgs(array(
                 'admin.tag',
@@ -2052,6 +2064,11 @@ class AdminTest extends PHPUnit_Framework_TestCase
             ->getMock();
 
         $tagAdmin->expects($this->any())->method('getFormBuilder')->will($this->returnValue($formBuilder));
+
+        $tagAdmin->setShowBuilder($showBuilder);
+        $tagAdmin->setListBuilder($listBuilder);
+        $tagAdmin->setDatagridBuilder($datagridBuilder);
+
         $tagAdmin->setParent($postAdmin);
 
         $tag = new Tag();

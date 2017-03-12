@@ -99,7 +99,7 @@ class CRUDController extends Controller
             $this->admin->setListMode($listMode);
         }
 
-        $datagrid = $this->admin->getDatagrid();
+        $datagrid = $this->get('sonata.admin.admin_builder')->getDatagrid($this->admin);
         $formView = $datagrid->getForm()->createView();
 
         // set the theme for the current Admin Form
@@ -249,7 +249,7 @@ class CRUDController extends Controller
         $this->admin->setSubject($object);
 
         /** @var $form Form */
-        $form = $this->admin->getForm();
+        $form = $this->get('sonata.admin.admin_builder')->getEditForm($this->admin);
         $form->setData($object);
         $form->handleRequest($request);
 
@@ -393,7 +393,7 @@ class CRUDController extends Controller
             $nonRelevantMessage = 'flash_batch_empty';
         }
 
-        $datagrid = $this->admin->getDatagrid();
+        $datagrid = $this->get('sonata.admin.admin_builder')->getDatagrid($this->admin);
         $datagrid->buildPager();
 
         if (true !== $nonRelevantMessage) {
@@ -492,7 +492,7 @@ class CRUDController extends Controller
         $this->admin->setSubject($object);
 
         /** @var $form \Symfony\Component\Form\Form */
-        $form = $this->admin->getForm();
+        $form = $this->get('sonata.admin.admin_builder')->getCreateForm($this->admin);
         $form->setData($object);
         $form->handleRequest($request);
 
@@ -593,12 +593,13 @@ class CRUDController extends Controller
             return $preResponse;
         }
 
+        $elements = $this->get('sonata.admin.admin_builder')->getShowForm($this->admin);
         $this->admin->setSubject($object);
 
         return $this->render($this->admin->getTemplate('show'), array(
             'action' => 'show',
             'object' => $object,
-            'elements' => $this->admin->getShow(),
+            'elements' => $elements,
         ), null);
     }
 
@@ -699,12 +700,13 @@ class CRUDController extends Controller
             );
         }
 
+        $elements = $this->get('sonata.admin.admin_builder')->getShowForm($this->admin);
         $this->admin->setSubject($object);
 
         return $this->render($this->admin->getTemplate('show'), array(
             'action' => 'show',
             'object' => $object,
-            'elements' => $this->admin->getShow(),
+            'elements' => $elements,
         ), null);
     }
 
@@ -773,13 +775,14 @@ class CRUDController extends Controller
             );
         }
 
+        $elements = $this->get('sonata.admin.admin_builder')->getShowForm($this->admin);
         $this->admin->setSubject($base_object);
 
         return $this->render($this->admin->getTemplate('show_compare'), array(
             'action' => 'show',
             'object' => $base_object,
             'object_compare' => $compare_object,
-            'elements' => $this->admin->getShow(),
+            'elements' => $elements,
         ), null);
     }
 
@@ -907,11 +910,11 @@ class CRUDController extends Controller
      */
     public function getRequest()
     {
-        if ($this->container->has('request_stack')) {
-            return $this->container->get('request_stack')->getCurrentRequest();
+        if ($this->has('request_stack')) {
+            return $this->get('request_stack')->getCurrentRequest();
         }
 
-        return $this->container->get('request');
+        return $this->get('request');
     }
 
     /**
@@ -976,7 +979,7 @@ class CRUDController extends Controller
             ));
         }
 
-        $this->admin = $this->container->get('sonata.admin.pool')->getAdminByAdminCode($adminCode);
+        $this->admin = $this->get('sonata.admin.pool')->getAdminByAdminCode($adminCode);
 
         if (!$this->admin) {
             throw new \RuntimeException(sprintf(
@@ -1007,8 +1010,8 @@ class CRUDController extends Controller
      */
     protected function getLogger()
     {
-        if ($this->container->has('logger')) {
-            return $this->container->get('logger');
+        if ($this->has('logger')) {
+            return $this->get('logger');
         }
 
         return new NullLogger();
@@ -1176,7 +1179,7 @@ class CRUDController extends Controller
     {
         $aclRoles = array();
         $roleHierarchy = $this->container->getParameter('security.role_hierarchy.roles');
-        $pool = $this->container->get('sonata.admin.pool');
+        $pool = $this->get('sonata.admin.pool');
 
         foreach ($pool->getAdminServiceIds() as $id) {
             try {
@@ -1233,10 +1236,10 @@ class CRUDController extends Controller
         $request = $this->getRequest();
         $token = $request->request->get('_sonata_csrf_token', false);
 
-        if ($this->container->has('security.csrf.token_manager')) { // SF3.0
-            $valid = $this->container->get('security.csrf.token_manager')->isTokenValid(new CsrfToken($intention, $token));
-        } elseif ($this->container->has('form.csrf_provider')) { // < SF3.0
-            $valid = $this->container->get('form.csrf_provider')->isCsrfTokenValid($intention, $token);
+        if ($this->has('security.csrf.token_manager')) { // SF3.0
+            $valid = $this->get('security.csrf.token_manager')->isTokenValid(new CsrfToken($intention, $token));
+        } elseif ($this->has('form.csrf_provider')) { // < SF3.0
+            $valid = $this->get('form.csrf_provider')->isCsrfTokenValid($intention, $token);
         } else {
             return;
         }
@@ -1267,13 +1270,13 @@ class CRUDController extends Controller
      */
     protected function getCsrfToken($intention)
     {
-        if ($this->container->has('security.csrf.token_manager')) {
-            return $this->container->get('security.csrf.token_manager')->getToken($intention)->getValue();
+        if ($this->has('security.csrf.token_manager')) {
+            return $this->get('security.csrf.token_manager')->getToken($intention)->getValue();
         }
 
         // TODO: Remove it when bumping requirements to SF 2.4+
-        if ($this->container->has('form.csrf_provider')) {
-            return $this->container->get('form.csrf_provider')->generateCsrfToken($intention);
+        if ($this->has('form.csrf_provider')) {
+            return $this->get('form.csrf_provider')->generateCsrfToken($intention);
         }
 
         return false;

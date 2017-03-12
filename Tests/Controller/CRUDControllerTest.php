@@ -129,6 +129,7 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
         $this->admin = $this->getMockBuilder('Sonata\AdminBundle\Admin\AbstractAdmin')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->adminBuilder = $this->createMock('Sonata\AdminBundle\Admin\AdminBuilderInterface');
         $this->translator = $this->createMock('Symfony\Component\Translation\TranslatorInterface');
         $this->parameters = array();
         $this->template = '';
@@ -168,6 +169,7 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
         $pool = $this->pool;
         $request = $this->request;
         $admin = $this->admin;
+        $adminBuilder = $this->adminBuilder;
         $session = $this->session;
         $translator = $this->translator;
 
@@ -177,7 +179,7 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
 
         $twigRenderer = $this->createMock('Symfony\Bridge\Twig\Form\TwigRendererInterface');
 
-        $formExtension = new FormExtension($twigRenderer);
+        $formExtension = new FormExtension();
 
         $twig->expects($this->any())
             ->method('getExtension')
@@ -290,6 +292,7 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
             ->will($this->returnCallback(function ($id) use (
                 $pool,
                 $admin,
+                $adminBuilder,
                 $request,
                 $templating,
                 $twig,
@@ -312,6 +315,8 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
                         return $requestStack;
                     case 'foo.admin':
                         return $admin;
+                    case 'sonata.admin.admin_builder':
+                        return $adminBuilder;
                     case 'templating':
                         return $templating;
                     case 'twig':
@@ -723,7 +728,7 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
             ->method('createView')
             ->will($this->returnValue($this->createMock('Symfony\Component\Form\FormView')));
 
-        $this->admin->expects($this->once())
+        $this->adminBuilder->expects($this->once())
             ->method('getDatagrid')
             ->will($this->returnValue($datagrid));
 
@@ -832,7 +837,7 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
             ->method('getObject')
             ->will($this->returnValue(false));
 
-        $this->controller->showAction(null, $this->request);
+        $this->controller->showAction(null);
     }
 
     public function testShowActionAccessDenied()
@@ -848,7 +853,7 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
             ->with($this->equalTo('show'))
             ->will($this->throwException(new AccessDeniedException()));
 
-        $this->controller->showAction(null, $this->request);
+        $this->controller->showAction(null);
     }
 
     public function testPreShow()
@@ -888,8 +893,9 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
 
         $show = $this->createMock('Sonata\AdminBundle\Admin\FieldDescriptionCollection');
 
-        $this->admin->expects($this->once())
-            ->method('getShow')
+        $this->adminBuilder->expects($this->once())
+            ->method('getShowForm')
+            ->with($this->admin)
             ->will($this->returnValue($show));
 
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $this->controller->showAction(null, $this->request));
@@ -1454,8 +1460,9 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->admin->expects($this->once())
-            ->method('getForm')
+        $this->adminBuilder->expects($this->once())
+            ->method('getEditForm')
+            ->with($this->admin)
             ->will($this->returnValue($form));
 
         $formView = $this->createMock('Symfony\Component\Form\FormView');
@@ -1510,8 +1517,9 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->admin->expects($this->once())
-            ->method('getForm')
+        $this->adminBuilder->expects($this->once())
+            ->method('getEditForm')
+            ->with($this->admin)
             ->will($this->returnValue($form));
 
         $form->expects($this->once())
@@ -1558,8 +1566,9 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->admin->expects($this->once())
-            ->method('getForm')
+        $this->adminBuilder->expects($this->once())
+            ->method('getEditForm')
+            ->with($this->admin)
             ->will($this->returnValue($form));
 
         $form->expects($this->once())
@@ -1620,8 +1629,9 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->admin->expects($this->once())
-            ->method('getForm')
+        $this->adminBuilder->expects($this->once())
+            ->method('getEditForm')
+            ->with($this->admin)
             ->will($this->returnValue($form));
 
         $form->expects($this->once())
@@ -1668,8 +1678,9 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->admin->expects($this->once())
-            ->method('getForm')
+        $this->adminBuilder->expects($this->once())
+            ->method('getEditForm')
+            ->with($this->admin)
             ->will($this->returnValue($form));
 
         $form->expects($this->once())
@@ -1727,8 +1738,9 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->admin->expects($this->once())
-            ->method('getForm')
+        $this->adminBuilder->expects($this->once())
+            ->method('getEditForm')
+            ->with($this->admin)
             ->will($this->returnValue($form));
 
         $form->expects($this->once())
@@ -1785,8 +1797,9 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->admin->expects($this->once())
-            ->method('getForm')
+        $this->adminBuilder->expects($this->once())
+            ->method('getEditForm')
+            ->with($this->admin)
             ->will($this->returnValue($form));
 
         $this->admin->expects($this->once())
@@ -1850,8 +1863,9 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
             ->method('isValid')
             ->will($this->returnValue(true));
 
-        $this->admin->expects($this->any())
-            ->method('getForm')
+        $this->adminBuilder->expects($this->any())
+            ->method('getEditForm')
+            ->with($this->admin)
             ->will($this->returnValue($form));
 
         $form->expects($this->any())
@@ -1942,8 +1956,9 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->admin->expects($this->once())
-            ->method('getForm')
+        $this->adminBuilder->expects($this->once())
+            ->method('getCreateForm')
+            ->with($this->admin)
             ->will($this->returnValue($form));
 
         $formView = $this->createMock('Symfony\Component\Form\FormView');
@@ -2017,8 +2032,9 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
             ->method('getClass')
             ->will($this->returnValue('stdClass'));
 
-        $this->admin->expects($this->once())
-            ->method('getForm')
+        $this->adminBuilder->expects($this->once())
+            ->method('getCreateForm')
+            ->with($this->admin)
             ->will($this->returnValue($form));
 
         $form->expects($this->once())
@@ -2076,8 +2092,9 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
             ->method('getClass')
             ->will($this->returnValue('stdClass'));
 
-        $this->admin->expects($this->once())
-            ->method('getForm')
+        $this->adminBuilder->expects($this->once())
+            ->method('getCreateForm')
+            ->with($this->admin)
             ->will($this->returnValue($form));
 
         $form->expects($this->once())
@@ -2117,8 +2134,9 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->admin->expects($this->once())
-            ->method('getForm')
+        $this->adminBuilder->expects($this->once())
+            ->method('getCreateForm')
+            ->with($this->admin)
             ->will($this->returnValue($form));
 
         $form->expects($this->once())
@@ -2182,8 +2200,9 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->admin->expects($this->once())
-            ->method('getForm')
+        $this->adminBuilder->expects($this->once())
+            ->method('getCreateForm')
+            ->with($this->admin)
             ->will($this->returnValue($form));
 
         $form->expects($this->once())
@@ -2255,8 +2274,9 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->admin->expects($this->once())
-            ->method('getForm')
+        $this->adminBuilder->expects($this->once())
+            ->method('getCreateForm')
+            ->with($this->admin)
             ->will($this->returnValue($form));
 
         $form->expects($this->once())
@@ -2307,8 +2327,9 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
             ->method('getClass')
             ->will($this->returnValue('stdClass'));
 
-        $this->admin->expects($this->once())
-            ->method('getForm')
+        $this->adminBuilder->expects($this->once())
+            ->method('getCreateForm')
+            ->with($this->admin)
             ->will($this->returnValue($form));
 
         $form->expects($this->once())
@@ -2363,8 +2384,9 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
             ->method('getClass')
             ->will($this->returnValue('stdClass'));
 
-        $this->admin->expects($this->once())
-            ->method('getForm')
+        $this->adminBuilder->expects($this->once())
+            ->method('getCreateForm')
+            ->with($this->admin)
             ->will($this->returnValue($form));
 
         $this->admin->expects($this->once())
@@ -2874,7 +2896,7 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
             ->with($this->equalTo('historyViewRevision'))
             ->will($this->throwException(new AccessDeniedException()));
 
-        $this->controller->historyViewRevisionAction(null, null, $this->request);
+        $this->controller->historyViewRevisionAction(null, null);
     }
 
     public function testHistoryViewRevisionActionNotFoundException()
@@ -2887,7 +2909,7 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
             ->method('getObject')
             ->will($this->returnValue(false));
 
-        $this->controller->historyViewRevisionAction(null, null, $this->request);
+        $this->controller->historyViewRevisionAction(null, null);
     }
 
     public function testHistoryViewRevisionActionNoReader()
@@ -2916,7 +2938,7 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
             ->with($this->equalTo('Foo'))
             ->will($this->returnValue(false));
 
-        $this->controller->historyViewRevisionAction(null, null, $this->request);
+        $this->controller->historyViewRevisionAction(null, null);
     }
 
     public function testHistoryViewRevisionActionNotFoundRevision()
@@ -2957,7 +2979,7 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
             ->with($this->equalTo('Foo'), $this->equalTo(123), $this->equalTo(456))
             ->will($this->returnValue(null));
 
-        $this->controller->historyViewRevisionAction(123, 456, $this->request);
+        $this->controller->historyViewRevisionAction(123, 456);
     }
 
     public function testHistoryViewRevisionAction()
@@ -3005,11 +3027,12 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue(null));
 
         $fieldDescriptionCollection = new FieldDescriptionCollection();
-        $this->admin->expects($this->once())
-            ->method('getShow')
+        $this->adminBuilder->expects($this->once())
+            ->method('getShowForm')
+            ->with($this->admin)
             ->will($this->returnValue($fieldDescriptionCollection));
 
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $this->controller->historyViewRevisionAction(123, 456, $this->request));
+        $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $this->controller->historyViewRevisionAction(123, 456));
 
         $this->assertSame($this->admin, $this->parameters['admin']);
         $this->assertSame('SonataAdminBundle::standard_layout.html.twig', $this->parameters['base_template']);
@@ -3032,7 +3055,7 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
             ->with($this->equalTo('historyCompareRevisions'))
             ->will($this->throwException(new AccessDeniedException()));
 
-        $this->controller->historyCompareRevisionsAction(null, null, null, $this->request);
+        $this->controller->historyCompareRevisionsAction(null, null, null);
     }
 
     public function testHistoryCompareRevisionsActionNotFoundException()
@@ -3050,7 +3073,7 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
             ->method('getObject')
             ->will($this->returnValue(false));
 
-        $this->controller->historyCompareRevisionsAction(null, null, null, $this->request);
+        $this->controller->historyCompareRevisionsAction(null, null, null);
     }
 
     public function testHistoryCompareRevisionsActionNoReader()
@@ -3227,8 +3250,9 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue(null));
 
         $fieldDescriptionCollection = new FieldDescriptionCollection();
-        $this->admin->expects($this->once())
-            ->method('getShow')
+        $this->adminBuilder->expects($this->once())
+            ->method('getShowForm')
+            ->with($this->admin)
             ->will($this->returnValue($fieldDescriptionCollection));
 
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $this->controller->historyCompareRevisionsAction(123, 456, 789, $this->request));
@@ -3305,8 +3329,9 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue($batchActions));
 
         $datagrid = $this->createMock('\Sonata\AdminBundle\Datagrid\DatagridInterface');
-        $this->admin->expects($this->once())
+        $this->adminBuilder->expects($this->once())
             ->method('getDatagrid')
+            ->with($this->admin)
             ->will($this->returnValue($datagrid));
 
         $this->request->setMethod('POST');
@@ -3336,7 +3361,7 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
             ->method('getQuery')
             ->will($this->returnValue($query));
 
-        $this->admin->expects($this->once())
+        $this->adminBuilder->expects($this->once())
             ->method('getDatagrid')
             ->will($this->returnValue($datagrid));
 
@@ -3391,7 +3416,7 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
             ->method('getQuery')
             ->will($this->returnValue($query));
 
-        $this->admin->expects($this->once())
+        $this->adminBuilder->expects($this->once())
             ->method('getDatagrid')
             ->will($this->returnValue($datagrid));
 
@@ -3448,8 +3473,9 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
 
         $datagrid = $this->createMock('\Sonata\AdminBundle\Datagrid\DatagridInterface');
 
-        $this->admin->expects($this->once())
+        $this->adminBuilder->expects($this->once())
             ->method('getDatagrid')
+            ->with($this->admin)
             ->will($this->returnValue($datagrid));
 
         $form = $this->getMockBuilder('Symfony\Component\Form\Form')
@@ -3499,8 +3525,9 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
 
         $datagrid = $this->createMock('\Sonata\AdminBundle\Datagrid\DatagridInterface');
 
-        $this->admin->expects($this->once())
+        $this->adminBuilder->expects($this->once())
             ->method('getDatagrid')
+            ->with($this->admin)
             ->will($this->returnValue($datagrid));
 
         $this->request->setMethod('POST');
@@ -3533,8 +3560,9 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
 
         $datagrid = $this->createMock('\Sonata\AdminBundle\Datagrid\DatagridInterface');
 
-        $this->admin->expects($this->once())
+        $this->adminBuilder->expects($this->once())
             ->method('getDatagrid')
+            ->with($this->admin)
             ->will($this->returnValue($datagrid));
 
         $this->request->setMethod('POST');
@@ -3564,8 +3592,9 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
 
         $datagrid = $this->createMock('\Sonata\AdminBundle\Datagrid\DatagridInterface');
 
-        $this->admin->expects($this->once())
+        $this->adminBuilder->expects($this->once())
             ->method('getDatagrid')
+            ->with($this->admin)
             ->will($this->returnValue($datagrid));
 
         $this->request->setMethod('POST');
@@ -3603,8 +3632,9 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
             ->method('getQuery')
             ->will($this->returnValue($query));
 
-        $this->admin->expects($this->once())
+        $this->adminBuilder->expects($this->once())
             ->method('getDatagrid')
+            ->with($this->admin)
             ->will($this->returnValue($datagrid));
 
         $modelManager = $this->createMock('Sonata\AdminBundle\Model\ModelManagerInterface');
@@ -3648,8 +3678,9 @@ class CRUDControllerTest extends PHPUnit_Framework_TestCase
             ->method('getQuery')
             ->will($this->returnValue($query));
 
-        $this->admin->expects($this->once())
+        $this->adminBuilder->expects($this->once())
             ->method('getDatagrid')
+            ->with($this->admin)
             ->will($this->returnValue($datagrid));
 
         $modelManager = $this->createMock('Sonata\AdminBundle\Model\ModelManagerInterface');

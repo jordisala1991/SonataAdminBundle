@@ -3112,7 +3112,11 @@ EOT;
         );
 
         if ($this->adminBuilder === null) {
-            $this->adminBuilder = new AdminBuilder();
+            $this->adminBuilder = new AdminBuilder(
+                $this->getShowBuilder(),
+                $this->getListBuilder(),
+                $this->getDatagridBuilder()
+            );
         }
 
         return $this->adminBuilder;
