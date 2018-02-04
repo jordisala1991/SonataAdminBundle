@@ -227,7 +227,8 @@ class Datagrid implements DatagridInterface
     public function hasActiveFilters()
     {
         foreach ($this->filters as $name => $filter) {
-            if ($filter->isActive()) {
+            $showFilter = $filter->getOption('show_filter', null);
+            if (($filter->isActive() && null === $showFilter) || true === $showFilter) {
                 return true;
             }
         }
@@ -239,7 +240,7 @@ class Datagrid implements DatagridInterface
     {
         foreach ($this->filters as $name => $filter) {
             $showFilter = $filter->getOption('show_filter', null);
-            if (($filter->isActive() && null === $showFilter) || (true === $showFilter)) {
+            if (null === $showFilter || true === $showFilter) {
                 return true;
             }
         }

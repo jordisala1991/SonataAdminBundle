@@ -229,7 +229,7 @@ file that was distributed with this source code.
 {% endblock %}
 
 {% block list_filters_actions %}
-    {%- if admin.datagrid.filters|length %}
+    {%- if admin.datagrid.hasDisplayableFilters %}
         <ul class="nav navbar-nav navbar-right">
 
             <li class="dropdown sonata-actions">
@@ -242,10 +242,9 @@ file that was distributed with this source code.
 
                 <ul class="dropdown-menu" role="menu">
                     {% for filter in admin.datagrid.filters if (filter.options['show_filter'] is same as(true) or filter.options['show_filter'] is null) %}
-                        {% set filterActive = ((filter.isActive() or filter.options['show_filter']) and not admin.isDefaultFilter(filter.formName)) %}
                         <li>
                             <a href="#" class="sonata-toggle-filter sonata-ba-action" filter-target="filter-{{ admin.uniqid }}-{{ filter.name }}" filter-container="filter-container-{{ admin.uniqid() }}">
-                                <i class="fa {{ (filter.isActive() or filter.options['show_filter']) ? 'fa-check-square-o' : 'fa-square-o' }}"></i>{{ filter.label|trans({}, filter.translationDomain ?: admin.translationDomain) }}
+                                <i class="fa {{ (filter.active or filter.options['show_filter']) ? 'fa-check-square-o' : 'fa-square-o' }}"></i>{{ filter.label|trans({}, filter.translationDomain ?: admin.translationDomain) }}
                             </a>
                         </li>
                     {% endfor %}
@@ -256,20 +255,20 @@ file that was distributed with this source code.
 {% endblock %}
 
 {% block list_filters %}
-    {% if admin.datagrid.filters %}
+    {%- if admin.datagrid.hasDisplayableFilters %}
         {% form_theme form admin.getTemplate('filter') %}
 
-        <div class="col-xs-12 col-md-12 sonata-filters-box" style="display: {{ admin.datagrid.hasDisplayableFilters ? 'block' : 'none' }}" id="filter-container-{{ admin.uniqid() }}">
+        <div class="col-xs-12 col-md-12 sonata-filters-box" style="display: {{ admin.datagrid.hasActiveFilters ? 'block' : 'none' }}" id="filter-container-{{ admin.uniqid() }}">
             <div class="box box-primary" >
                 <div class="box-body">
-                    <form class="sonata-filter-form form-horizontal {{ admin.isChild and 1 == admin.datagrid.filters|length ? 'hide' : '' }}" action="{{ admin.generateUrl('list') }}" method="GET" role="form">
+                    <form class="sonata-filter-form form-horizontal" action="{{ admin.generateUrl('list') }}" method="GET" role="form">
                         {{ form_errors(form) }}
 
                         <div class="row">
                             <div class="col-sm-9">
                                 {% set withAdvancedFilter = false %}
-                                {% for filter in admin.datagrid.filters %}
-                                    {% set filterActive = ((filter.isActive() and filter.options['show_filter'] is null) or (filter.options['show_filter'] is same as(true))) and not admin.isDefaultFilter(filter.formName) %}
+                                {% for filter in admin.datagrid.filters if (filter.options['show_filter'] is same as(true) or filter.options['show_filter'] is null) %}
+                                    {% set filterActive = (filter.active or filter.options['show_filter'] is same as(true)) %}
                                     {% set filterVisible = filter.options['show_filter'] is same as(true) or filter.options['show_filter'] is null %}
                                     <div class="form-group {% block sonata_list_filter_group_class %}{% endblock %}" id="filter-{{ admin.uniqid }}-{{ filter.name }}" sonata-filter="{{ filterVisible ? 'true' : 'false' }}" style="display: {% if filterActive %}block{% else %}none{% endif %}">
                                         {% if filter.label is not same as(false) %}
@@ -333,5 +332,5 @@ file that was distributed with this source code.
                 </div>
             </div>
         </div>
-    {% endif %}
+    {% endif -%}
 {% endblock %}

@@ -41,7 +41,7 @@ file that was distributed with this source code.
             </div>
         </div>
 
-        {% if _list_filters|trim %}
+        {% if _list_filters is not empty %}
             <div class="row">
                 {{ _list_filters|raw }}
             </div>
