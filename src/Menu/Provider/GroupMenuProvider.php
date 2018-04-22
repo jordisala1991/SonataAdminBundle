@@ -80,51 +80,15 @@ class GroupMenuProvider implements MenuProviderInterface
     {
         $group = $options['group'];
 
-        $menuItem = $this->menuFactory->createItem(
-            $options['name'],
-            [
-                'label' => $group['label'],
-            ]
-        );
+        $menuItem = $this->menuFactory->createItem($options['name']);
 
-        if (empty($group['on_top'])) {
+        if (empty($group['on_top']) || false === $group['on_top']) {
             foreach ($group['items'] as $item) {
-                if (isset($item['admin']) && !empty($item['admin'])) {
-                    $admin = $this->pool->getInstance($item['admin']);
+                $item = $this->generateMenuItem($item, $group);
 
-                    // skip menu item if no `list` url is available or user doesn't have the LIST access rights
-                    if (!$admin->hasRoute('list') || !$admin->hasAccess('list')) {
-                        continue;
-                    }
-
-                    $label = $admin->getLabel();
-                    $options = $admin->generateMenuUrl('list', [], $item['route_absolute']);
-                    $options['extras'] = [
-                        'label_catalogue' => $admin->getTranslationDomain(),
-                        'admin' => $admin,
-                    ];
-                } else {
-                    //NEXT_MAJOR: Remove if statement of null checker.
-                    if (null !== $this->checker) {
-                        if ((!empty($item['roles']) && !$this->checker->isGranted($item['roles']))
-                            || (!empty($group['roles']) && !$this->checker->isGranted($group['roles'], $item['route']))
-                        ) {
-                            continue;
-                        }
-                    }
-
-                    $label = $item['label'];
-                    $options = [
-                        'route' => $item['route'],
-                        'routeParameters' => $item['route_params'],
-                        'routeAbsolute' => $item['route_absolute'],
-                        'extras' => [
-                            'label_catalogue' => $group['label_catalogue'],
-                        ],
-                    ];
+                if (null !== $item) {
+                    $menuItem->addChild($item);
                 }
-
-                $menuItem->addChild($label, $options);
             }
 
             if (false === $menuItem->hasChildren()) {
@@ -133,28 +97,17 @@ class GroupMenuProvider implements MenuProviderInterface
                 $menuItem->setAttribute('class', 'keep-open');
                 $menuItem->setExtra('keep_open', $group['keep_open']);
             }
-        } else {
-            foreach ($group['items'] as $item) {
-                if (isset($item['admin']) && !empty($item['admin'])) {
-                    $admin = $this->pool->getInstance($item['admin']);
+        } elseif (1 === count($group['items'])) {
+            $item = $this->generateMenuItem($group['items'][0], $group);
 
-                    // Do not display group if no `list` url is available or user doesn't have the LIST access rights
-                    if (!$admin->hasRoute('list') || !$admin->hasAccess('list')) {
-                        $menuItem->setDisplay(false);
-
-                        continue;
-                    }
-
-                    $options = $admin->generateUrl('list');
-                    $menuItem->setExtra('route', $admin->getBaseRouteName().'_list');
-                    $menuItem->setExtra('on_top', $group['on_top']);
-                    $menuItem->setUri($options);
-                } else {
-                    $router = $this->pool->getContainer()->get('router');
-                    $menuItem->setUri($router->generate($item['route']));
-                }
+            if (null !== $item) {
+                $menuItem = $item;
+                $menuItem->setExtra('on_top', $group['on_top']);
+            } else {
+                $menuItem->setDisplay(false);
             }
         }
+        $menuItem->setLabel($group['label']);
 
         return $menuItem;
     }
@@ -169,5 +122,46 @@ class GroupMenuProvider implements MenuProviderInterface
     public function has($name, array $options = [])
     {
         return 'sonata_group_menu' === $name;
+    }
+
+    /**
+     * @return ItemInterface|null
+     */
+    private function generateMenuItem(array $item, array $group)
+    {
+        if (isset($item['admin']) && !empty($item['admin'])) {
+            $admin = $this->pool->getInstance($item['admin']);
+
+            // skip menu item if no `list` url is available or user doesn't have the LIST access rights
+            if (!$admin->hasRoute('list') || !$admin->hasAccess('list')) {
+                return null;
+            }
+
+            $options = $admin->generateMenuUrl('list', [], $item['route_absolute']);
+            $options['extras'] = [
+                'label_catalogue' => $admin->getTranslationDomain(),
+                'admin' => $admin,
+            ];
+
+            return $this->menuFactory->createItem($admin->getLabel(), $options);
+        }
+
+        //NEXT_MAJOR: Remove if statement of null checker.
+        if (null !== $this->checker) {
+            if ((!empty($item['roles']) && !$this->checker->isGranted($item['roles']))
+                || (!empty($group['roles']) && !$this->checker->isGranted($group['roles']))
+            ) {
+                return null;
+            }
+        }
+
+        return $this->menuFactory->createItem($item['label'], [
+            'route' => $item['route'],
+            'routeParameters' => $item['route_params'],
+            'routeAbsolute' => $item['route_absolute'],
+            'extras' => [
+                'label_catalogue' => $group['label_catalogue'],
+            ],
+        ]);
     }
 }
