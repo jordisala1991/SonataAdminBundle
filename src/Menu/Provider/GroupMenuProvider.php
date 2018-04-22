@@ -12,6 +12,7 @@
 namespace Sonata\AdminBundle\Menu\Provider;
 
 use Knp\Menu\FactoryInterface;
+use Knp\Menu\ItemInterface;
 use Knp\Menu\Provider\MenuProviderInterface;
 use Sonata\AdminBundle\Admin\Pool;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -84,10 +85,8 @@ class GroupMenuProvider implements MenuProviderInterface
 
         if (empty($group['on_top']) || false === $group['on_top']) {
             foreach ($group['items'] as $item) {
-                $item = $this->generateMenuItem($item, $group);
-
-                if (null !== $item) {
-                    $menuItem->addChild($item);
+                if ($this->canGenerateMenuItem($item, $group)) {
+                    $menuItem->addChild($this->generateMenuItem($item, $group));
                 }
             }
 
@@ -98,10 +97,8 @@ class GroupMenuProvider implements MenuProviderInterface
                 $menuItem->setExtra('keep_open', $group['keep_open']);
             }
         } elseif (1 === count($group['items'])) {
-            $item = $this->generateMenuItem($group['items'][0], $group);
-
-            if (null !== $item) {
-                $menuItem = $item;
+            if ($this->canGenerateMenuItem($group['items'][0], $group)) {
+                $menuItem = $this->generateMenuItem($group['items'][0], $group);
                 $menuItem->setExtra('on_top', $group['on_top']);
             } else {
                 $menuItem->setDisplay(false);
@@ -125,17 +122,31 @@ class GroupMenuProvider implements MenuProviderInterface
     }
 
     /**
-     * @return ItemInterface|null
+     * @return bool
      */
-    private function generateMenuItem(array $item, array $group)
+    private function canGenerateMenuItem(array $item, array $group)
     {
         if (isset($item['admin']) && !empty($item['admin'])) {
             $admin = $this->pool->getInstance($item['admin']);
 
             // skip menu item if no `list` url is available or user doesn't have the LIST access rights
-            if (!$admin->hasRoute('list') || !$admin->hasAccess('list')) {
-                return null;
-            }
+            return $admin->hasRoute('list') && $admin->hasAccess('list');
+        }
+
+        //NEXT_MAJOR: Remove if statement of null checker.
+        return null === $this->checker || (
+            (empty($item['roles']) || $this->checker->isGranted($item['roles'])) &&
+            (empty($group['roles']) || $this->checker->isGranted($group['roles']))
+        );
+    }
+
+    /**
+     * @return ItemInterface
+     */
+    private function generateMenuItem(array $item, array $group)
+    {
+        if (isset($item['admin']) && !empty($item['admin'])) {
+            $admin = $this->pool->getInstance($item['admin']);
 
             $options = $admin->generateMenuUrl('list', [], $item['route_absolute']);
             $options['extras'] = [
@@ -144,15 +155,6 @@ class GroupMenuProvider implements MenuProviderInterface
             ];
 
             return $this->menuFactory->createItem($admin->getLabel(), $options);
-        }
-
-        //NEXT_MAJOR: Remove if statement of null checker.
-        if (null !== $this->checker) {
-            if ((!empty($item['roles']) && !$this->checker->isGranted($item['roles']))
-                || (!empty($group['roles']) && !$this->checker->isGranted($group['roles']))
-            ) {
-                return null;
-            }
         }
 
         return $this->menuFactory->createItem($item['label'], [
