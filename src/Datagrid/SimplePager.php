@@ -46,11 +46,8 @@ final class SimplePager extends Pager
      * If set to 2 the pager will generate links to the next two pages
      * If set to 3 the pager will generate links to the next three pages
      * etc.
-     *
-     * @param int $maxPerPage Number of records to display per page
-     * @param int $threshold
      */
-    public function __construct($maxPerPage = 10, $threshold = 1)
+    public function __construct(int $maxPerPage = 10, int $threshold = 1)
     {
         parent::__construct($maxPerPage);
         $this->setThreshold($threshold);
@@ -66,7 +63,7 @@ final class SimplePager extends Pager
         return $n;
     }
 
-    public function getResults($hydrationMode = null)
+    public function getResults(?int $hydrationMode = null): array
     {
         if ($this->results) {
             return $this->results;
@@ -88,7 +85,7 @@ final class SimplePager extends Pager
         return $this->results;
     }
 
-    public function haveToPaginate()
+    public function haveToPaginate(): bool
     {
         return $this->haveToPaginate || $this->getPage() > 1;
     }
@@ -100,23 +97,26 @@ final class SimplePager extends Pager
      */
     public function init(): void
     {
-        if (!$this->getQuery()) {
+        $query = $this->getQuery();
+
+        if (null === $query) {
             throw new \RuntimeException('Uninitialized QueryBuilder');
         }
+
         $this->resetIterator();
 
         if (0 === $this->getPage() || 0 === $this->getMaxPerPage()) {
             $this->setLastPage(0);
-            $this->getQuery()->setFirstResult(0);
-            $this->getQuery()->setMaxResults(0);
+            $query->setFirstResult(0);
+            $query->setMaxResults(0);
         } else {
             $offset = ($this->getPage() - 1) * $this->getMaxPerPage();
-            $this->getQuery()->setFirstResult($offset);
+            $query->setFirstResult($offset);
 
             $maxOffset = $this->getThreshold() > 0
                 ? $this->getMaxPerPage() * $this->threshold + 1 : $this->getMaxPerPage() + 1;
 
-            $this->getQuery()->setMaxResults($maxOffset);
+            $query->setMaxResults($maxOffset);
             $this->initializeIterator();
 
             $t = (int) ceil($this->thresholdCount / $this->getMaxPerPage()) + $this->getPage() - 1;
@@ -126,18 +126,13 @@ final class SimplePager extends Pager
 
     /**
      * Set how many pages to look forward to create links to next pages.
-     *
-     * @param int $threshold
      */
-    public function setThreshold($threshold): void
+    public function setThreshold(int $threshold): void
     {
-        $this->threshold = (int) $threshold;
+        $this->threshold = $threshold;
     }
 
-    /**
-     * @return int
-     */
-    public function getThreshold()
+    public function getThreshold(): int
     {
         return $this->threshold;
     }

@@ -101,9 +101,9 @@ final class SearchAction
         $total = false;
         if ($pager = $this->searchHandler->search(
             $admin,
-            $request->get('q'),
-            $request->get('page'),
-            $request->get('offset')
+            $request->get('q', ''),
+            $request->query->getInt('page'),
+            $request->query->getInt('offset', 20)
         )) {
             foreach ($pager->getResults() as $result) {
                 $results[] = [

@@ -25,8 +25,6 @@ interface FieldDescriptionInterface
 
     /**
      * Returns the field name.
-     *
-     * @return string the field name
      */
     public function getFieldName(): ?string;
 
@@ -37,8 +35,6 @@ interface FieldDescriptionInterface
 
     /**
      * Returns the name, the name can be used as a form label or table header.
-     *
-     * @return string the name
      */
     public function getName(): ?string;
 
@@ -83,8 +79,6 @@ interface FieldDescriptionInterface
 
     /**
      * Returns the template name.
-     *
-     * @return string|null the template name
      */
     public function getTemplate(): ?string;
 
@@ -102,7 +96,7 @@ interface FieldDescriptionInterface
     /**
      * set the parent Admin (only used in nested admin).
      */
-    public function setParent(AdminInterface $parent);
+    public function setParent(AdminInterface $parent): void;
 
     /**
      * Returns the parent Admin (only used in nested admin).
@@ -133,8 +127,6 @@ interface FieldDescriptionInterface
 
     /**
      * Returns the field mapping definition.
-     *
-     * @return array the field mapping definition
      */
     public function getFieldMapping(): array;
 
@@ -152,10 +144,8 @@ interface FieldDescriptionInterface
 
     /**
      * set the association admin instance (only used if the field is linked to an Admin).
-     *
-     * @param AdminInterface $associationAdmin the associated admin
      */
-    public function setAssociationAdmin(AdminInterface $associationAdmin);
+    public function setAssociationAdmin(AdminInterface $associationAdmin): void;
 
     /**
      * Returns the associated Admin instance (only used if the field is linked to an Admin).
@@ -179,10 +169,10 @@ interface FieldDescriptionInterface
     /**
      * set the admin class linked to this FieldDescription.
      */
-    public function setAdmin(AdminInterface $admin);
+    public function setAdmin(AdminInterface $admin): void;
 
     /**
-     * @return AdminInterface the admin class linked to this FieldDescription
+     * Returns the admin class linked to this FieldDescription.
      */
     public function getAdmin(): AdminInterface;
 
@@ -205,12 +195,12 @@ interface FieldDescriptionInterface
      *
      * @param string|int $mappingType
      */
-    public function setMappingType($mappingType);
+    public function setMappingType($mappingType): void;
 
     /**
      * Returns the mapping type.
      *
-     * @return int|string
+     * @return int|string|null
      */
     public function getMappingType();
 
@@ -234,15 +224,11 @@ interface FieldDescriptionInterface
 
     /**
      * Returns the field mapping definition used when sorting.
-     *
-     * @return array the field mapping definition
      */
     public function getSortFieldMapping(): array;
 
     /**
      * Returns the parent association mapping definitions used when sorting.
-     *
-     * @return array the parent association mapping definitions
      */
     public function getSortParentAssociationMapping(): array;
 

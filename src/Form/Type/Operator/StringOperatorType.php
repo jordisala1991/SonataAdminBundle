@@ -25,7 +25,7 @@ final class StringOperatorType extends AbstractType
     public const TYPE_STARTS_WITH = 4;
     public const TYPE_ENDS_WITH = 5;
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'choice_translation_domain' => 'SonataAdminBundle',

@@ -129,7 +129,7 @@ class ListMapper extends BaseMapper
         if (null === $fieldDescription->getLabel()) {
             $fieldDescription->setOption(
                 'label',
-                $this->admin->getLabelTranslatorStrategy()->getLabel($fieldDescription->getName(), 'list', 'label')
+                $this->admin->getTranslationLabel($fieldDescription->getName() ?? '', 'list', 'label')
             );
         }
 

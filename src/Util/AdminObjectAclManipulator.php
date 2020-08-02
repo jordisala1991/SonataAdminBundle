@@ -18,10 +18,12 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Symfony\Component\Security\Acl\Exception\NoAceFoundException;
+use Symfony\Component\Security\Acl\Model\SecurityIdentityInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -41,15 +43,13 @@ class AdminObjectAclManipulator
      * @var FormFactoryInterface
      */
     protected $formFactory;
+
     /**
      * @var string
      */
     protected $maskBuilderClass;
 
-    /**
-     * @param string $maskBuilderClass
-     */
-    public function __construct(FormFactoryInterface $formFactory, $maskBuilderClass)
+    public function __construct(FormFactoryInterface $formFactory, string $maskBuilderClass)
     {
         $this->formFactory = $formFactory;
         $this->maskBuilderClass = $maskBuilderClass;
@@ -57,20 +57,16 @@ class AdminObjectAclManipulator
 
     /**
      * Gets mask builder class name.
-     *
-     * @return string
      */
-    public function getMaskBuilderClass()
+    public function getMaskBuilderClass(): string
     {
         return $this->maskBuilderClass;
     }
 
     /**
      * Gets the ACL users form.
-     *
-     * @return Form
      */
-    public function createAclUsersForm(AdminObjectAclData $data)
+    public function createAclUsersForm(AdminObjectAclData $data): FormInterface
     {
         $aclValues = $data->getAclUsers();
         $formBuilder = $this->formFactory->createNamedBuilder(self::ACL_USERS_FORM_NAME, FormType::class);
@@ -82,10 +78,8 @@ class AdminObjectAclManipulator
 
     /**
      * Gets the ACL roles form.
-     *
-     * @return Form
      */
-    public function createAclRolesForm(AdminObjectAclData $data)
+    public function createAclRolesForm(AdminObjectAclData $data): FormInterface
     {
         $aclValues = $data->getAclRoles();
         $formBuilder = $this->formFactory->createNamedBuilder(self::ACL_ROLES_FORM_NAME, FormType::class);
@@ -120,7 +114,7 @@ class AdminObjectAclManipulator
     /**
      * Builds ACL.
      */
-    protected function buildAcl(AdminObjectAclData $data, Form $form, \Traversable $aclValues): void
+    protected function buildAcl(AdminObjectAclData $data, FormInterface $form, \Traversable $aclValues): void
     {
         $masks = $data->getMasks();
         $acl = $data->getAcl();
@@ -186,10 +180,8 @@ class AdminObjectAclManipulator
 
     /**
      * Builds the form.
-     *
-     * @return Form
      */
-    protected function buildForm(AdminObjectAclData $data, FormBuilderInterface $formBuilder, \Traversable $aclValues)
+    protected function buildForm(AdminObjectAclData $data, FormBuilderInterface $formBuilder, \Traversable $aclValues): FormInterface
     {
         // Retrieve object identity
         $objectIdentity = ObjectIdentity::fromDomainObject($data->getObject());
@@ -248,7 +240,7 @@ class AdminObjectAclManipulator
      *
      * @return RoleSecurityIdentity|UserSecurityIdentity
      */
-    protected function getSecurityIdentity($aclValue)
+    protected function getSecurityIdentity($aclValue): SecurityIdentityInterface
     {
         return ($aclValue instanceof UserInterface)
             ? UserSecurityIdentity::fromAccount($aclValue)

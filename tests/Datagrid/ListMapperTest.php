@@ -22,7 +22,6 @@ use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Builder\ListBuilderInterface;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Model\ModelManagerInterface;
-use Sonata\AdminBundle\Translator\NoopLabelTranslatorStrategy;
 
 /**
  * @author Andrej Hudec <pulzarraider@gmail.com>
@@ -80,11 +79,11 @@ class ListMapperTest extends TestCase
             ->method('getModelManager')
             ->willReturn($modelManager);
 
-        $labelTranslatorStrategy = new NoopLabelTranslatorStrategy();
-
         $this->admin
-            ->method('getLabelTranslatorStrategy')
-            ->willReturn($labelTranslatorStrategy);
+            ->method('getTranslationLabel')
+            ->willReturnCallback(static function (string $label): string {
+                return $label;
+            });
 
         $this->admin
             ->method('isGranted')

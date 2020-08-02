@@ -26,7 +26,7 @@ interface AdminAclManipulatorInterface
     /**
      * Batch configure the ACLs for all objects handled by an Admin.
      */
-    public function configureAcls(OutputInterface $output, AdminInterface $admin);
+    public function configureAcls(OutputInterface $output, AdminInterface $admin): void;
 
     /**
      * Add the class ACE's to the admin ACL.
@@ -38,5 +38,5 @@ interface AdminAclManipulatorInterface
         AclInterface $acl,
         AclSecurityHandlerInterface $securityHandler,
         array $roleInformation = []
-    );
+    ): bool;
 }

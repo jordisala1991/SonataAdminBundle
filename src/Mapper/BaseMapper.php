@@ -51,10 +51,7 @@ abstract class BaseMapper
 
     abstract public function has(string $key): bool;
 
-    /**
-     * @return $this
-     */
-    abstract public function remove(string $key);
+    abstract public function remove(string $key): self;
 
     /**
      * Returns configured keys.
@@ -65,8 +62,6 @@ abstract class BaseMapper
 
     /**
      * @param string[] $keys field names
-     *
-     * @return $this
      */
-    abstract public function reorder(array $keys);
+    abstract public function reorder(array $keys): self;
 }

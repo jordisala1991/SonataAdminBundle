@@ -36,22 +36,22 @@ abstract class Filter implements FilterInterface
     protected $options = [];
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $condition;
 
-    public function initialize($name, array $options = []): void
+    public function initialize(string $name, array $options = []): void
     {
         $this->name = $name;
         $this->setOptions($options);
     }
 
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function getFormName()
+    public function getFormName(): string
     {
         /*
            Symfony default form class sadly can't handle
@@ -60,10 +60,10 @@ abstract class Filter implements FilterInterface
            So use this trick to avoid any issue.
         */
 
-        return str_replace('.', '__', $this->name);
+        return str_replace('.', '__', $this->name ?? '');
     }
 
-    public function getOption($name, $default = null)
+    public function getOption(string $name, $default = null)
     {
         if (\array_key_exists($name, $this->options)) {
             return $this->options[$name];
@@ -72,22 +72,22 @@ abstract class Filter implements FilterInterface
         return $default;
     }
 
-    public function setOption($name, $value): void
+    public function setOption(string $name, $value): void
     {
         $this->options[$name] = $value;
     }
 
-    public function getFieldType()
+    public function getFieldType(): string
     {
         return $this->getOption('field_type', TextType::class);
     }
 
-    public function getFieldOptions()
+    public function getFieldOptions(): array
     {
         return $this->getOption('field_options', ['required' => false]);
     }
 
-    public function getFieldOption($name, $default = null)
+    public function getFieldOption(string $name, $default = null)
     {
         if (isset($this->options['field_options'][$name]) && \is_array($this->options['field_options'])) {
             return $this->options['field_options'][$name];
@@ -96,7 +96,7 @@ abstract class Filter implements FilterInterface
         return $default;
     }
 
-    public function setFieldOption($name, $value): void
+    public function setFieldOption(string $name, $value): void
     {
         $this->options['field_options'][$name] = $value;
     }
@@ -106,12 +106,12 @@ abstract class Filter implements FilterInterface
         return $this->getOption('label');
     }
 
-    public function setLabel($label): void
+    public function setLabel(string $label): void
     {
         $this->setOption('label', $label);
     }
 
-    public function getFieldName()
+    public function getFieldName(): ?string
     {
         $fieldName = $this->getOption('field_name');
 
@@ -125,12 +125,12 @@ abstract class Filter implements FilterInterface
         return $fieldName;
     }
 
-    public function getParentAssociationMappings()
+    public function getParentAssociationMappings(): array
     {
         return $this->getOption('parent_association_mappings', []);
     }
 
-    public function getFieldMapping()
+    public function getFieldMapping(): array
     {
         $fieldMapping = $this->getOption('field_mapping');
 
@@ -144,7 +144,7 @@ abstract class Filter implements FilterInterface
         return $fieldMapping;
     }
 
-    public function getAssociationMapping()
+    public function getAssociationMapping(): array
     {
         $associationMapping = $this->getOption('association_mapping');
 
@@ -172,10 +172,8 @@ abstract class Filter implements FilterInterface
 
     /**
      * Get options.
-     *
-     * @return array
      */
-    public function getOptions()
+    public function getOptions(): array
     {
         return $this->options;
     }
@@ -200,7 +198,7 @@ abstract class Filter implements FilterInterface
         return $this->value;
     }
 
-    public function isActive()
+    public function isActive(): bool
     {
         $values = $this->getValue();
 
@@ -209,17 +207,17 @@ abstract class Filter implements FilterInterface
             && '' !== $values['value'];
     }
 
-    public function setCondition($condition): void
+    public function setCondition(string $condition): void
     {
         $this->condition = $condition;
     }
 
-    public function getCondition()
+    public function getCondition(): ?string
     {
         return $this->condition;
     }
 
-    public function getTranslationDomain()
+    public function getTranslationDomain(): ?string
     {
         return $this->getOption('translation_domain');
     }

@@ -36,12 +36,12 @@ final class ChoiceTypeExtension extends AbstractTypeExtension
         $view->vars['sortable'] = \array_key_exists('sortable', $options) && $options['sortable'];
     }
 
-    public function getExtendedType()
+    public function getExtendedType(): string
     {
         return ChoiceType::class;
     }
 
-    public static function getExtendedTypes()
+    public static function getExtendedTypes(): array
     {
         return [ChoiceType::class];
     }

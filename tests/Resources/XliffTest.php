@@ -15,10 +15,7 @@ namespace Sonata\AdminBundle\Tests\Resources;
 
 class XliffTest extends XliffValidatorTestCase
 {
-    /**
-     * @return array List all path to validate xliff
-     */
-    public function getXliffPaths()
+    public function getXliffPaths(): array
     {
         return [[sprintf('%s/../../src/Resources/translations', __DIR__)]];
     }

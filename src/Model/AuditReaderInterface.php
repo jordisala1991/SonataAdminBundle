@@ -18,47 +18,13 @@ namespace Sonata\AdminBundle\Model;
  */
 interface AuditReaderInterface
 {
-    /**
-     * @param string $className
-     * @param string $id
-     * @param string $revision
-     *
-     * @return object
-     */
-    public function find($className, $id, $revision);
+    public function find(string $className, int $id, ?int $revision): ?object;
 
-    /**
-     * @param string $className
-     * @param int    $limit
-     * @param int    $offset
-     *
-     * @return object[]
-     */
-    public function findRevisionHistory($className, $limit = 20, $offset = 0);
+    public function findRevisionHistory(string $className, int $limit = 20, int $offset = 0): array;
 
-    /**
-     * @param string $classname
-     * @param string $revision
-     *
-     * @return object
-     */
-    public function findRevision($classname, $revision);
+    public function findRevision(string $classname, int $revision): object;
 
-    /**
-     * @param string $className
-     * @param string $id
-     *
-     * @return object[]
-     */
-    public function findRevisions($className, $id);
+    public function findRevisions(string $className, int $id): array;
 
-    /**
-     * @param string $className
-     * @param int    $id
-     * @param int    $oldRevision
-     * @param int    $newRevision
-     *
-     * @return array
-     */
-    public function diff($className, $id, $oldRevision, $newRevision);
+    public function diff(string $className, int $id, int $oldRevision, int $newRevision): array;
 }

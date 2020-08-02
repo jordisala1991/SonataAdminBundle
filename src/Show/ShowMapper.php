@@ -28,6 +28,9 @@ use Sonata\AdminBundle\Mapper\BaseGroupedMapper;
  */
 class ShowMapper extends BaseGroupedMapper
 {
+    /**
+     * @var FieldDescriptionCollection
+     */
     protected $list;
 
     /**
@@ -83,7 +86,7 @@ class ShowMapper extends BaseGroupedMapper
         $this->addFieldToCurrentGroup($fieldKey);
 
         if (null === $fieldDescription->getLabel()) {
-            $fieldDescription->setOption('label', $this->admin->getLabelTranslatorStrategy()->getLabel($fieldDescription->getName(), 'show', 'label'));
+            $fieldDescription->setOption('label', $this->admin->getTranslationLabel($fieldDescription->getName(), 'show', 'label'));
         }
 
         $fieldDescription->setOption('safe', $fieldDescription->getOption('safe', false));

@@ -49,18 +49,12 @@ final class ModelToIdPropertyTransformer implements DataTransformerInterface
      */
     private $toStringCallback;
 
-    /**
-     * @param string        $className
-     * @param string        $property
-     * @param bool          $multiple
-     * @param callable|null $toStringCallback
-     */
     public function __construct(
         ModelManagerInterface $modelManager,
-        $className,
-        $property,
-        $multiple = false,
-        $toStringCallback = null
+        string $className,
+        string $property,
+        bool $multiple = false,
+        ?callable $toStringCallback = null
     ) {
         $this->modelManager = $modelManager;
         $this->className = $className;
@@ -148,12 +142,6 @@ final class ModelToIdPropertyTransformer implements DataTransformerInterface
             $id = current($this->modelManager->getIdentifierValues($model));
 
             if (null !== $this->toStringCallback) {
-                if (!\is_callable($this->toStringCallback)) {
-                    throw new \RuntimeException(
-                        'Callback in "to_string_callback" option doesn`t contain callable function.'
-                    );
-                }
-
                 $label = ($this->toStringCallback)($model, $this->property);
             } else {
                 try {

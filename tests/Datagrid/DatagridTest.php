@@ -313,8 +313,6 @@ class DatagridTest extends TestCase
 
     public function testGetResults(): void
     {
-        $this->assertNull($this->datagrid->getResults());
-
         $this->pager->expects($this->once())
             ->method('getResults')
             ->willReturn(['foo', 'bar']);
@@ -328,7 +326,6 @@ class DatagridTest extends TestCase
             ->method('getResults')
             ->willReturn([]);
 
-        $this->assertSame([], $this->datagrid->getResults());
         $this->assertSame([], $this->datagrid->getResults());
     }
 
@@ -411,13 +408,11 @@ class DatagridTest extends TestCase
 
         $this->pager->expects($this->once())
             ->method('setMaxPerPage')
-            ->with($this->equalTo('25'))
-            ->willReturn(null);
+            ->with($this->equalTo('25'));
 
         $this->pager->expects($this->once())
             ->method('setPage')
-            ->with($this->equalTo('1'))
-            ->willReturn(null);
+            ->with($this->equalTo('1'));
 
         $this->datagrid = new Datagrid($this->query, $this->columns, $this->pager, $this->formBuilder, ['_sort_by' => $sortBy]);
 
@@ -460,13 +455,11 @@ class DatagridTest extends TestCase
 
         $this->pager->expects($this->once())
             ->method('setMaxPerPage')
-            ->with($this->equalTo('50'))
-            ->willReturn(null);
+            ->with($this->equalTo('50'));
 
         $this->pager->expects($this->once())
             ->method('setPage')
-            ->with($this->equalTo('3'))
-            ->willReturn(null);
+            ->with($this->equalTo('3'));
 
         $this->datagrid = new Datagrid($this->query, $this->columns, $this->pager, $this->formBuilder, ['_sort_by' => $sortBy, '_page' => $page, '_per_page' => $perPage]);
 
@@ -523,13 +516,11 @@ class DatagridTest extends TestCase
     {
         $this->pager->expects($this->once())
             ->method('setMaxPerPage')
-            ->with($this->equalTo('50'))
-            ->willReturn(null);
+            ->with($this->equalTo('50'));
 
         $this->pager->expects($this->once())
             ->method('setPage')
-            ->with($this->equalTo('3'))
-            ->willReturn(null);
+            ->with($this->equalTo('3'));
 
         $this->datagrid = new Datagrid($this->query, $this->columns, $this->pager, $this->formBuilder, []);
         $this->datagrid->setValue('_per_page', null, $perPage);

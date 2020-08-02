@@ -66,7 +66,7 @@ class Pool
     protected $options = [];
 
     /**
-     * @var PropertyAccessorInterface
+     * @var PropertyAccessorInterface|null
      */
     protected $propertyAccessor;
 

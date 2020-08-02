@@ -22,7 +22,7 @@ final class DateRangeOperatorType extends AbstractType
     public const TYPE_BETWEEN = 1;
     public const TYPE_NOT_BETWEEN = 2;
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'choice_translation_domain' => 'SonataAdminBundle',

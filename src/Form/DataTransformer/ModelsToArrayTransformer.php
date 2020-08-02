@@ -89,10 +89,7 @@ final class ModelsToArrayTransformer implements DataTransformerInterface
         return $collection;
     }
 
-    /**
-     * @param object $model
-     */
-    private function getIdentifierValues($model): array
+    private function getIdentifierValues(object $model): array
     {
         try {
             return $this->modelManager->getIdentifierValues($model);

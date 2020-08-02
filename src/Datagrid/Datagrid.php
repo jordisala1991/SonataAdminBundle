@@ -89,12 +89,12 @@ final class Datagrid implements DatagridInterface
         $this->formBuilder = $formBuilder;
     }
 
-    public function getPager()
+    public function getPager(): PagerInterface
     {
         return $this->pager;
     }
 
-    public function getResults()
+    public function getResults(): ?array
     {
         $this->buildPager();
 
@@ -199,17 +199,17 @@ final class Datagrid implements DatagridInterface
         $this->filters[$filter->getName()] = $filter;
     }
 
-    public function hasFilter($name)
+    public function hasFilter(string $name): bool
     {
         return isset($this->filters[$name]);
     }
 
-    public function removeFilter($name): void
+    public function removeFilter(string $name): void
     {
         unset($this->filters[$name]);
     }
 
-    public function getFilter($name)
+    public function getFilter(string $name): FilterInterface
     {
         if (!$this->hasFilter($name)) {
             throw new \InvalidArgumentException(sprintf(
@@ -221,7 +221,7 @@ final class Datagrid implements DatagridInterface
         return $this->filters[$name];
     }
 
-    public function getFilters()
+    public function getFilters(): array
     {
         return $this->filters;
     }
@@ -231,12 +231,12 @@ final class Datagrid implements DatagridInterface
         $this->filters = array_merge(array_flip($keys), $this->filters);
     }
 
-    public function getValues()
+    public function getValues(): array
     {
         return $this->values;
     }
 
-    public function setValue($name, $operator, $value): void
+    public function setValue(string $name, ?string $operator, $value): void
     {
         $this->values[$name] = [
             'type' => $operator,
@@ -244,7 +244,7 @@ final class Datagrid implements DatagridInterface
         ];
     }
 
-    public function hasActiveFilters()
+    public function hasActiveFilters(): bool
     {
         foreach ($this->filters as $name => $filter) {
             if ($filter->isActive()) {
@@ -255,7 +255,7 @@ final class Datagrid implements DatagridInterface
         return false;
     }
 
-    public function hasDisplayableFilters()
+    public function hasDisplayableFilters(): bool
     {
         foreach ($this->filters as $name => $filter) {
             $showFilter = $filter->getOption('show_filter', null);
@@ -267,17 +267,17 @@ final class Datagrid implements DatagridInterface
         return false;
     }
 
-    public function getColumns()
+    public function getColumns(): FieldDescriptionCollection
     {
         return $this->columns;
     }
 
-    public function getQuery()
+    public function getQuery(): ProxyQueryInterface
     {
         return $this->query;
     }
 
-    public function getForm()
+    public function getForm(): FormInterface
     {
         $this->buildPager();
 

@@ -22,7 +22,7 @@ final class EqualOperatorType extends AbstractType
     public const TYPE_EQUAL = 1;
     public const TYPE_NOT_EQUAL = 2;
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'choice_translation_domain' => 'SonataAdminBundle',

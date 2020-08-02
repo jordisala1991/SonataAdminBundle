@@ -109,7 +109,7 @@ final class AdminPermissionMap implements PermissionMapInterface
         ],
     ];
 
-    public function getMasks($permission, $object)
+    public function getMasks($permission, $object): ?array
     {
         if (!isset($this->map[$permission])) {
             return null;

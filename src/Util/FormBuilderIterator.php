@@ -21,19 +21,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 final class FormBuilderIterator extends \RecursiveArrayIterator
 {
     /**
-     * @var \ReflectionProperty
-     */
-    private static $reflection;
-
-    /**
      * @var FormBuilderInterface
      */
     private $formBuilder;
-
-    /**
-     * @var array
-     */
-    private $keys = [];
 
     /**
      * @var bool|string
@@ -46,7 +36,7 @@ final class FormBuilderIterator extends \RecursiveArrayIterator
     private $iterator;
 
     /**
-     * @param bool $prefix
+     * @param bool|string $prefix
      */
     public function __construct(FormBuilderInterface $formBuilder, $prefix = false)
     {
@@ -93,12 +83,7 @@ final class FormBuilderIterator extends \RecursiveArrayIterator
         return \count(self::getKeys($this->current())) > 0;
     }
 
-    /**
-     * @static
-     *
-     * @return array
-     */
-    private static function getKeys(FormBuilderInterface $formBuilder)
+    private static function getKeys(FormBuilderInterface $formBuilder): array
     {
         return array_keys($formBuilder->all());
     }

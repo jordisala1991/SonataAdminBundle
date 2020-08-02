@@ -46,7 +46,7 @@ use Symfony\Component\Security\Csrf\CsrfToken;
 class CRUDController extends Controller
 {
     /**
-     * @var ContainerInterface
+     * @var ContainerInterface|null
      */
     protected $container;
 
@@ -74,12 +74,9 @@ class CRUDController extends Controller
     /**
      * Renders a view while passing mandatory parameters on to the template.
      *
-     * @param string               $view       The view name
      * @param array<string, mixed> $parameters An array of parameters to pass to the view
-     *
-     * @return Response A Response instance
      */
-    public function renderWithExtraParams($view, array $parameters = [], ?Response $response = null)
+    public function renderWithExtraParams(string $view, array $parameters = [], ?Response $response = null): Response
     {
         return $this->render($view, $this->addRenderExtraParams($parameters), $response);
     }
@@ -88,10 +85,8 @@ class CRUDController extends Controller
      * List action.
      *
      * @throws AccessDeniedException If access is not granted
-     *
-     * @return Response
      */
-    public function listAction(Request $request)
+    public function listAction(Request $request): Response
     {
         $this->admin->checkAccess('list');
 
@@ -127,10 +122,8 @@ class CRUDController extends Controller
      * Execute a batch delete.
      *
      * @throws AccessDeniedException If access is not granted
-     *
-     * @return RedirectResponse
      */
-    public function batchActionDelete(ProxyQueryInterface $query)
+    public function batchActionDelete(ProxyQueryInterface $query): RedirectResponse
     {
         $this->admin->checkAccess('batchDelete');
 
@@ -161,7 +154,7 @@ class CRUDController extends Controller
      *
      * @return Response|RedirectResponse
      */
-    public function deleteAction(Request $request)
+    public function deleteAction(Request $request): Response
     {
         $id = $request->get($this->admin->getIdParameter());
         $object = $this->admin->getObject($id);
@@ -237,7 +230,7 @@ class CRUDController extends Controller
      *
      * @return Response|RedirectResponse
      */
-    public function editAction(Request $request)
+    public function editAction(Request $request): Response
     {
         // the key used to lookup the template
         $templateKey = 'edit';
@@ -348,7 +341,7 @@ class CRUDController extends Controller
      *
      * @return Response|RedirectResponse
      */
-    public function batchAction(Request $request)
+    public function batchAction(Request $request): Response
     {
         $restMethod = $this->getRestMethod();
 
@@ -469,10 +462,8 @@ class CRUDController extends Controller
      * Create action.
      *
      * @throws AccessDeniedException If access is not granted
-     *
-     * @return Response
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request): Response
     {
         // the key used to lookup the template
         $templateKey = 'edit';
@@ -581,10 +572,8 @@ class CRUDController extends Controller
      *
      * @throws NotFoundHttpException If the object does not exist
      * @throws AccessDeniedException If access is not granted
-     *
-     * @return Response
      */
-    public function showAction(Request $request)
+    public function showAction(Request $request): Response
     {
         $id = $request->get($this->admin->getIdParameter());
         $object = $this->admin->getObject($id);
@@ -621,10 +610,8 @@ class CRUDController extends Controller
      *
      * @throws AccessDeniedException If access is not granted
      * @throws NotFoundHttpException If the object does not exist or the audit reader is not available
-     *
-     * @return Response
      */
-    public function historyAction(Request $request)
+    public function historyAction(Request $request): Response
     {
         $id = $request->get($this->admin->getIdParameter());
         $object = $this->admin->getObject($id);
@@ -661,14 +648,10 @@ class CRUDController extends Controller
     /**
      * View history revision of object.
      *
-     * @param string|null $revision
-     *
      * @throws AccessDeniedException If access is not granted
      * @throws NotFoundHttpException If the object or revision does not exist or the audit reader is not available
-     *
-     * @return Response
      */
-    public function historyViewRevisionAction(Request $request, $revision = null)
+    public function historyViewRevisionAction(Request $request, ?int $revision = null): Response
     {
         $id = $request->get($this->admin->getIdParameter());
         $object = $this->admin->getObject($id);
@@ -716,15 +699,10 @@ class CRUDController extends Controller
     /**
      * Compare history revisions of object.
      *
-     * @param int|string|null $baseRevision
-     * @param int|string|null $compareRevision
-     *
      * @throws AccessDeniedException If access is not granted
      * @throws NotFoundHttpException If the object or revision does not exist or the audit reader is not available
-     *
-     * @return Response
      */
-    public function historyCompareRevisionsAction(Request $request, $baseRevision = null, $compareRevision = null)
+    public function historyCompareRevisionsAction(Request $request, ?int $baseRevision = null, ?int $compareRevision = null): Response
     {
         $this->admin->checkAccess('historyCompareRevisions');
 
@@ -789,10 +767,8 @@ class CRUDController extends Controller
      *
      * @throws AccessDeniedException If access is not granted
      * @throws \RuntimeException     If the export format is invalid
-     *
-     * @return Response
      */
-    public function exportAction(Request $request)
+    public function exportAction(Request $request): Response
     {
         $this->admin->checkAccess('export');
 
@@ -895,12 +871,9 @@ class CRUDController extends Controller
         ], null);
     }
 
-    /**
-     * @return Request
-     */
-    public function getRequest()
+    public function getRequest(): Request
     {
-        return $this->container->get('request_stack')->getCurrentRequest();
+        return $this->get('request_stack')->getCurrentRequest();
     }
 
     /**
@@ -924,11 +897,9 @@ class CRUDController extends Controller
     /**
      * Gets a container configuration parameter by its name.
      *
-     * @param string $name The parameter name
-     *
      * @return mixed
      */
-    protected function getParameter($name)
+    protected function getParameter(string $name)
     {
         return $this->container->getParameter($name);
     }
@@ -937,22 +908,16 @@ class CRUDController extends Controller
      * Render JSON.
      *
      * @param mixed $data
-     * @param int   $status
-     * @param array $headers
-     *
-     * @return JsonResponse with json encoded data
      */
-    protected function renderJson($data, $status = Response::HTTP_OK, $headers = [])
+    protected function renderJson($data, int $status = Response::HTTP_OK, array $headers = []): JsonResponse
     {
         return new JsonResponse($data, $status, $headers);
     }
 
     /**
      * Returns true if the request is a XMLHttpRequest.
-     *
-     * @return bool True if the request is an XMLHttpRequest, false otherwise
      */
-    protected function isXmlHttpRequest()
+    protected function isXmlHttpRequest(): bool
     {
         $request = $this->getRequest();
 
@@ -962,10 +927,8 @@ class CRUDController extends Controller
     /**
      * Returns the correct RESTful verb, given either by the request itself or
      * via the "_method" parameter.
-     *
-     * @return string HTTP method, either
      */
-    protected function getRestMethod()
+    protected function getRestMethod(): string
     {
         $request = $this->getRequest();
 
@@ -996,7 +959,7 @@ class CRUDController extends Controller
         }
 
         try {
-            $this->admin = $this->container->get('sonata.admin.pool')->getAdminByAdminCode($adminCode);
+            $this->admin = $this->get('sonata.admin.pool')->getAdminByAdminCode($adminCode);
         } catch (\InvalidArgumentException $e) {
             throw new \RuntimeException(sprintf(
                 'Unable to find the admin class related to the current controller (%s)',
@@ -1004,7 +967,7 @@ class CRUDController extends Controller
             ));
         }
 
-        $this->templateRegistry = $this->container->get(sprintf('%s.template_registry', $this->admin->getCode()));
+        $this->templateRegistry = $this->get(sprintf('%s.template_registry', $this->admin->getCode()));
         if (!$this->templateRegistry instanceof TemplateRegistryInterface) {
             throw new \RuntimeException(sprintf(
                 'Unable to find the template registry related to the current admin (%s)',
@@ -1029,13 +992,11 @@ class CRUDController extends Controller
     /**
      * Proxy for the logger service of the container.
      * If no such service is found, a NullLogger is returned.
-     *
-     * @return LoggerInterface
      */
-    protected function getLogger()
+    protected function getLogger(): LoggerInterface
     {
-        if ($this->container->has('logger')) {
-            $logger = $this->container->get('logger');
+        if ($this->has('logger')) {
+            $logger = $this->get('logger');
             \assert($logger instanceof LoggerInterface);
 
             return $logger;
@@ -1046,10 +1007,8 @@ class CRUDController extends Controller
 
     /**
      * Returns the base template name.
-     *
-     * @return string The template name
      */
-    protected function getBaseTemplate()
+    protected function getBaseTemplate(): string
     {
         if ($this->isXmlHttpRequest()) {
             return $this->templateRegistry->getTemplate('ajax');
@@ -1068,20 +1027,19 @@ class CRUDController extends Controller
         }
 
         $context = ['exception' => $e];
-        if ($e->getPrevious()) {
-            $context['previous_exception_message'] = $e->getPrevious()->getMessage();
+        $previousException = $e->getPrevious();
+
+        if (null !== $previousException) {
+            $context['previous_exception_message'] = $previousException->getMessage();
         }
+
         $this->getLogger()->error($e->getMessage(), $context);
     }
 
     /**
      * Redirect the user depend on this choice.
-     *
-     * @param object $object
-     *
-     * @return RedirectResponse
      */
-    protected function redirectTo($object)
+    protected function redirectTo(object $object): RedirectResponse
     {
         $request = $this->getRequest();
 
@@ -1129,10 +1087,8 @@ class CRUDController extends Controller
 
     /**
      * Redirects the user to the list view.
-     *
-     * @return RedirectResponse
      */
-    final protected function redirectToList()
+    final protected function redirectToList(): RedirectResponse
     {
         $parameters = [];
 
@@ -1145,10 +1101,8 @@ class CRUDController extends Controller
 
     /**
      * Returns true if the preview is requested to be shown.
-     *
-     * @return bool
      */
-    protected function isPreviewRequested()
+    protected function isPreviewRequested(): bool
     {
         $request = $this->getRequest();
 
@@ -1157,10 +1111,8 @@ class CRUDController extends Controller
 
     /**
      * Returns true if the preview has been approved.
-     *
-     * @return bool
      */
-    protected function isPreviewApproved()
+    protected function isPreviewApproved(): bool
     {
         $request = $this->getRequest();
 
@@ -1172,10 +1124,8 @@ class CRUDController extends Controller
      *
      * That means either a preview is requested or the preview has already been shown
      * and it got approved/declined.
-     *
-     * @return bool
      */
-    protected function isInPreviewMode()
+    protected function isInPreviewMode(): bool
     {
         return $this->admin->supportsPreviewMode()
         && ($this->isPreviewRequested()
@@ -1185,10 +1135,8 @@ class CRUDController extends Controller
 
     /**
      * Returns true if the preview has been declined.
-     *
-     * @return bool
      */
-    protected function isPreviewDeclined()
+    protected function isPreviewDeclined(): bool
     {
         $request = $this->getRequest();
 
@@ -1197,14 +1145,12 @@ class CRUDController extends Controller
 
     /**
      * Gets ACL users.
-     *
-     * @return \Traversable
      */
-    protected function getAclUsers()
+    protected function getAclUsers(): \Traversable
     {
         $aclUsers = [];
 
-        $userManagerServiceName = $this->container->getParameter('sonata.admin.security.acl_user_manager');
+        $userManagerServiceName = $this->getParameter('sonata.admin.security.acl_user_manager');
         if (null !== $userManagerServiceName && $this->has($userManagerServiceName)) {
             $userManager = $this->get($userManagerServiceName);
 
@@ -1218,14 +1164,12 @@ class CRUDController extends Controller
 
     /**
      * Gets ACL roles.
-     *
-     * @return \Traversable
      */
-    protected function getAclRoles()
+    protected function getAclRoles(): \Traversable
     {
         $aclRoles = [];
-        $roleHierarchy = $this->container->getParameter('security.role_hierarchy.roles');
-        $pool = $this->container->get('sonata.admin.pool');
+        $roleHierarchy = $this->getParameter('security.role_hierarchy.roles');
+        $pool = $this->get('sonata.admin.pool');
 
         foreach ($pool->getAdminServiceIds() as $id) {
             try {
@@ -1254,17 +1198,15 @@ class CRUDController extends Controller
     /**
      * Validate CSRF token for action without form.
      *
-     * @param string $intention
-     *
      * @throws HttpException
      */
-    protected function validateCsrfToken($intention): void
+    protected function validateCsrfToken(string $intention): void
     {
         $request = $this->getRequest();
         $token = $request->get('_sonata_csrf_token');
 
-        if ($this->container->has('security.csrf.token_manager')) {
-            $valid = $this->container->get('security.csrf.token_manager')->isTokenValid(new CsrfToken($intention, $token));
+        if ($this->has('security.csrf.token_manager')) {
+            $valid = $this->get('security.csrf.token_manager')->isTokenValid(new CsrfToken($intention, $token));
         } else {
             return;
         }
@@ -1276,12 +1218,8 @@ class CRUDController extends Controller
 
     /**
      * Escape string for html output.
-     *
-     * @param string $s
-     *
-     * @return string
      */
-    protected function escapeHtml($s)
+    protected function escapeHtml(string $s): string
     {
         return htmlspecialchars((string) $s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
@@ -1289,14 +1227,12 @@ class CRUDController extends Controller
     /**
      * Get CSRF token.
      *
-     * @param string $intention
-     *
      * @return string|false
      */
-    protected function getCsrfToken($intention)
+    protected function getCsrfToken(string $intention)
     {
-        if ($this->container->has('security.csrf.token_manager')) {
-            return $this->container->get('security.csrf.token_manager')->getToken($intention)->getValue();
+        if ($this->has('security.csrf.token_manager')) {
+            return $this->get('security.csrf.token_manager')->getToken($intention)->getValue();
         }
 
         return false;
@@ -1305,12 +1241,8 @@ class CRUDController extends Controller
     /**
      * This method can be overloaded in your custom CRUD controller.
      * It's called from createAction.
-     *
-     * @param object $object
-     *
-     * @return Response|null
      */
-    protected function preCreate(Request $request, $object)
+    protected function preCreate(Request $request, object $object): ?Response
     {
         return null;
     }
@@ -1318,12 +1250,8 @@ class CRUDController extends Controller
     /**
      * This method can be overloaded in your custom CRUD controller.
      * It's called from editAction.
-     *
-     * @param object $object
-     *
-     * @return Response|null
      */
-    protected function preEdit(Request $request, $object)
+    protected function preEdit(Request $request, object $object): ?Response
     {
         return null;
     }
@@ -1331,12 +1259,8 @@ class CRUDController extends Controller
     /**
      * This method can be overloaded in your custom CRUD controller.
      * It's called from deleteAction.
-     *
-     * @param object $object
-     *
-     * @return Response|null
      */
-    protected function preDelete(Request $request, $object)
+    protected function preDelete(Request $request, object $object): ?Response
     {
         return null;
     }
@@ -1344,12 +1268,8 @@ class CRUDController extends Controller
     /**
      * This method can be overloaded in your custom CRUD controller.
      * It's called from showAction.
-     *
-     * @param object $object
-     *
-     * @return Response|null
      */
-    protected function preShow(Request $request, $object)
+    protected function preShow(Request $request, object $object): ?Response
     {
         return null;
     }
@@ -1357,24 +1277,16 @@ class CRUDController extends Controller
     /**
      * This method can be overloaded in your custom CRUD controller.
      * It's called from listAction.
-     *
-     * @return Response|null
      */
-    protected function preList(Request $request)
+    protected function preList(Request $request): ?Response
     {
         return null;
     }
 
     /**
      * Translate a message id.
-     *
-     * @param string $id
-     * @param string $domain
-     * @param string $locale
-     *
-     * @return string translated string
      */
-    final protected function trans($id, array $parameters = [], $domain = null, $locale = null)
+    final protected function trans(string $id, array $parameters = [], ?string $domain = null, ?string $locale = null): string
     {
         $domain = $domain ?: $this->admin->getTranslationDomain();
 
@@ -1434,10 +1346,7 @@ class CRUDController extends Controller
         ], Response::HTTP_BAD_REQUEST);
     }
 
-    /**
-     * @param object $object
-     */
-    private function handleXmlHttpRequestSuccessResponse(Request $request, $object): JsonResponse
+    private function handleXmlHttpRequestSuccessResponse(Request $request, object $object): JsonResponse
     {
         if (empty(array_intersect(['application/json', '*/*'], $request->getAcceptableContentTypes()))) {
             return $this->renderJson([], Response::HTTP_NOT_ACCEPTABLE);

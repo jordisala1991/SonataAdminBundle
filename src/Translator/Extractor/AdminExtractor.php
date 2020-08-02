@@ -76,7 +76,7 @@ final class AdminExtractor implements ExtractorInterface, LabelTranslatorStrateg
         $this->breadcrumbsBuilder = $breadcrumbsBuilder;
     }
 
-    public function extract($resource, MessageCatalogue $catalogue)
+    public function extract($resource, MessageCatalogue $catalogue): void
     {
         $this->catalogue = $catalogue;
 
@@ -113,7 +113,7 @@ final class AdminExtractor implements ExtractorInterface, LabelTranslatorStrateg
         $this->prefix = $prefix;
     }
 
-    public function getLabel($label, $context = '', $type = ''): string
+    public function getLabel(?string $label, string $context = '', string $type = ''): string
     {
         $label = $this->labelStrategy->getLabel($label, $context, $type);
 

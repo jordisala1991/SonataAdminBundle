@@ -37,13 +37,6 @@ class ValidatorsTest extends TestCase
         ];
     }
 
-    public function testValidateUsernameWithException(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-
-        Validators::validateUsername(null);
-    }
-
     /**
      * @dataProvider getValidateEntityNameTests
      */

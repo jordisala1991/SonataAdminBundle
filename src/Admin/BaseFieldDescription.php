@@ -59,22 +59,22 @@ use Sonata\AdminBundle\Exception\NoValueException;
 abstract class BaseFieldDescription implements FieldDescriptionInterface
 {
     /**
-     * @var string the field name
+     * @var string|null the field name
      */
     protected $name;
 
     /**
-     * @var string the type
+     * @var string|null the type
      */
     protected $type;
 
     /**
-     * @var string|int the original mapping type
+     * @var string|int|null the original mapping type
      */
     protected $mappingType;
 
     /**
-     * @var string the field name (of the form)
+     * @var string|null the field name (of the form)
      */
     protected $fieldName;
 
@@ -215,7 +215,7 @@ abstract class BaseFieldDescription implements FieldDescriptionInterface
 
     public function getParent(): AdminInterface
     {
-        if (!$this->hasParent()) {
+        if (null === $this->parent) {
             throw new \LogicException(sprintf('%s has no parent.', static::class));
         }
 
@@ -250,7 +250,7 @@ abstract class BaseFieldDescription implements FieldDescriptionInterface
 
     public function getAssociationAdmin(): AdminInterface
     {
-        if (!$this->hasAssociationAdmin()) {
+        if (null === $this->associationAdmin) {
             throw new \LogicException(sprintf('%s has no association admin.', static::class));
         }
 
@@ -327,7 +327,7 @@ abstract class BaseFieldDescription implements FieldDescriptionInterface
 
     public function getAdmin(): AdminInterface
     {
-        if (!$this->hasAdmin()) {
+        if (null === $this->admin) {
             throw new \LogicException(sprintf('%s has no admin.', static::class));
         }
 
@@ -423,6 +423,9 @@ abstract class BaseFieldDescription implements FieldDescriptionInterface
         );
     }
 
+    /**
+     * @return mixed|null
+     */
     private function callCachedGetter(object $object, string $fieldName, array $parameters = [])
     {
         $getterKey = $this->getFieldGetterKey($object, $fieldName);

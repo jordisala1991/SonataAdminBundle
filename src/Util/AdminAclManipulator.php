@@ -31,10 +31,7 @@ final class AdminAclManipulator implements AdminAclManipulatorInterface
      */
     private $maskBuilderClass;
 
-    /**
-     * @param string $maskBuilderClass
-     */
-    public function __construct($maskBuilderClass)
+    public function __construct(string $maskBuilderClass)
     {
         $this->maskBuilderClass = $maskBuilderClass;
     }
@@ -72,7 +69,7 @@ final class AdminAclManipulator implements AdminAclManipulatorInterface
         AclInterface $acl,
         AclSecurityHandlerInterface $securityHandler,
         array $roleInformation = []
-    ) {
+    ): bool {
         if (!$acl instanceof MutableAclInterface) {
             throw new \TypeError(sprintf(
                 'Argument 2 passed to "%s()" must implement "%s".',

@@ -34,7 +34,7 @@ final class ModelManagerCompilerPass implements CompilerPassInterface
         foreach ($container->findTaggedServiceIds(self::MANAGER_TAG) as $id => $tags) {
             $definition = $container->findDefinition($id);
 
-            if (!is_subclass_of($definition->getClass(), ModelManagerInterface::class)) {
+            if (!is_subclass_of($definition->getClass() ?? '', ModelManagerInterface::class)) {
                 throw new LogicException(sprintf(
                     'Service "%s" must implement `%s`.',
                     $id,

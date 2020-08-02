@@ -60,7 +60,7 @@ class ModelListTypeTest extends TypeTestCase
                 'class' => 'My\Entity',
             ]
         );
-        $this->modelManager->find('My\Entity', 42)->shouldBeCalled();
+        $this->modelManager->find('My\Entity', 42)->shouldBeCalled()->willReturn(null);
         $form->submit($formData);
         $this->assertTrue($form->isSynchronized());
     }

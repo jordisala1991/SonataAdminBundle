@@ -34,7 +34,7 @@ interface UrlGeneratorInterface
      */
     public function getRouterIdParameter(): string;
 
-    public function setRouteGenerator(RouteGeneratorInterface $routeGenerator);
+    public function setRouteGenerator(RouteGeneratorInterface $routeGenerator): void;
 
     /**
      * Generates the object url with the given $name.

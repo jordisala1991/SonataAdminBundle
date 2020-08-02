@@ -570,10 +570,7 @@ class AddDependencyCallsCompilerPassTest extends TestCase
         $this->assertSame('extra_argument_2', $definition->getArgument(3));
     }
 
-    /**
-     * @return array
-     */
-    protected function getConfig()
+    protected function getConfig(): array
     {
         return [
             'dashboard' => [

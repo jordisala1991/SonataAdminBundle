@@ -23,7 +23,7 @@ final class ContainsOperatorType extends AbstractType
     public const TYPE_NOT_CONTAINS = 2;
     public const TYPE_EQUAL = 3;
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'choice_translation_domain' => 'SonataAdminBundle',

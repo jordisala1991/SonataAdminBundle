@@ -63,10 +63,8 @@ final class MenuBuilder
 
     /**
      * Builds sidebar menu.
-     *
-     * @return ItemInterface
      */
-    public function createSidebarMenu()
+    public function createSidebarMenu(): ItemInterface
     {
         $menu = $this->factory->createItem('root');
 

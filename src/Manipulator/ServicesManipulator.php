@@ -37,25 +37,21 @@ final class ServicesManipulator
         public: true
 ';
 
-    /**
-     * @param string $file
-     */
-    public function __construct($file)
+    public function __construct(string $file)
     {
-        $this->file = (string) $file;
+        $this->file = $file;
     }
 
     /**
-     * @param string $serviceId
-     * @param string $modelClass
-     * @param string $adminClass
-     * @param string $controllerName
-     * @param string $managerType
-     *
      * @throws \RuntimeException
      */
-    public function addResource($serviceId, $modelClass, $adminClass, $controllerName, $managerType): void
-    {
+    public function addResource(
+        string $serviceId,
+        string $modelClass,
+        string $adminClass,
+        string $controllerName,
+        string $managerType
+    ): void {
         $code = "services:\n";
 
         if (is_file($this->file)) {

@@ -23,88 +23,43 @@ use Symfony\Component\Form\FormInterface;
  */
 interface DatagridInterface
 {
-    /**
-     * @return PagerInterface
-     */
-    public function getPager();
+    public function getPager(): PagerInterface;
 
-    /**
-     * @return ProxyQueryInterface
-     */
-    public function getQuery();
+    public function getQuery(): ProxyQueryInterface;
 
-    /**
-     * @return array
-     */
-    public function getResults();
+    public function getResults(): ?array;
 
-    public function buildPager();
+    public function buildPager(): void;
 
-    /**
-     * @return FilterInterface
-     */
-    public function addFilter(FilterInterface $filter);
+    public function addFilter(FilterInterface $filter): void;
 
-    /**
-     * @return array
-     */
-    public function getFilters();
+    public function getFilters(): array;
 
     /**
      * Reorder filters.
      */
-    public function reorderFilters(array $keys);
+    public function reorderFilters(array $keys): void;
+
+    public function getValues(): array;
+
+    public function getColumns(): FieldDescriptionCollection;
 
     /**
-     * @return array
+     * @param mixed $value
      */
-    public function getValues();
+    public function setValue(string $name, ?string $operator, $value): void;
 
-    /**
-     * @return FieldDescriptionCollection
-     */
-    public function getColumns();
+    public function getForm(): FormInterface;
 
-    /**
-     * @param string      $name
-     * @param string|null $operator
-     * @param mixed       $value
-     */
-    public function setValue($name, $operator, $value);
+    public function getFilter(string $name): FilterInterface;
 
-    /**
-     * @return FormInterface
-     */
-    public function getForm();
+    public function hasFilter(string $name): bool;
 
-    /**
-     * @param string $name
-     *
-     * @return FilterInterface
-     */
-    public function getFilter($name);
+    public function removeFilter(string $name): void;
 
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
-    public function hasFilter($name);
+    public function hasActiveFilters(): bool;
 
-    /**
-     * @param string $name
-     */
-    public function removeFilter($name);
-
-    /**
-     * @return bool
-     */
-    public function hasActiveFilters();
-
-    /**
-     * @return bool
-     */
-    public function hasDisplayableFilters();
+    public function hasDisplayableFilters(): bool;
 
     public function getSortParameters(FieldDescriptionInterface $fieldDescription): array;
 

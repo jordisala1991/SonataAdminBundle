@@ -87,12 +87,7 @@ final class ExtensionCompilerPass implements CompilerPassInterface
         }
     }
 
-    /**
-     * @param string $id
-     *
-     * @return array
-     */
-    private function getExtensionsForAdmin($id, Definition $admin, ContainerBuilder $container, array $extensionMap)
+    private function getExtensionsForAdmin(string $id, Definition $admin, ContainerBuilder $container, array $extensionMap): array
     {
         $extensions = [];
         $classReflection = $subjectReflection = null;
@@ -197,10 +192,7 @@ final class ExtensionCompilerPass implements CompilerPassInterface
         return $extensionMap;
     }
 
-    /**
-     * @return bool
-     */
-    private function hasTrait(\ReflectionClass $class, $traitName)
+    private function hasTrait(\ReflectionClass $class, string $traitName): bool
     {
         if (\in_array($traitName, $class->getTraitNames(), true)) {
             return true;

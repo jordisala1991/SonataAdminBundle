@@ -28,22 +28,29 @@ use Symfony\Component\PropertyAccess\PropertyPath;
  */
 final class ModelChoiceLoader implements ChoiceLoaderInterface
 {
+    /**
+     * @var array
+     */
     public $identifier;
 
     /**
-     * @var \Sonata\AdminBundle\Model\ModelManagerInterface
+     * @var ModelManagerInterface
      */
     private $modelManager;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $class;
 
-    private $property;
-
+    /**
+     * @var mixed|null
+     */
     private $query;
 
+    /**
+     * @var array
+     */
     private $choices;
 
     /**
@@ -56,25 +63,24 @@ final class ModelChoiceLoader implements ChoiceLoaderInterface
      */
     private $propertyAccessor;
 
+    /**
+     * @var ArrayChoiceList|null
+     */
     private $choiceList;
 
     /**
-     * @param string      $class
-     * @param string|null $property
-     * @param mixed|null  $query
-     * @param array       $choices
+     * @param mixed|null $query
      */
     public function __construct(
         ModelManagerInterface $modelManager,
-        $class,
-        $property = null,
+        ?string $class,
+        ?string $property = null,
         $query = null,
-        $choices = [],
+        array $choices = [],
         ?PropertyAccessorInterface $propertyAccessor = null
     ) {
         $this->modelManager = $modelManager;
         $this->class = $class;
-        $this->property = $property;
         $this->query = $query;
         $this->choices = $choices;
 

@@ -38,7 +38,7 @@ final class RoleSecurityHandler implements SecurityHandlerInterface
         $this->superAdminRoles = $superAdminRoles;
     }
 
-    public function isGranted(AdminInterface $admin, $attributes, $object = null)
+    public function isGranted(AdminInterface $admin, $attributes, $object = null): bool
     {
         if (!\is_array($attributes)) {
             $attributes = [$attributes];
@@ -59,24 +59,27 @@ final class RoleSecurityHandler implements SecurityHandlerInterface
         }
     }
 
-    public function getBaseRole(AdminInterface $admin)
+    public function getBaseRole(AdminInterface $admin): string
     {
         return sprintf('ROLE_%s_%%s', str_replace('.', '_', strtoupper($admin->getCode())));
     }
 
-    public function buildSecurityInformation(AdminInterface $admin)
+    public function buildSecurityInformation(AdminInterface $admin): array
     {
         return [];
     }
 
-    public function createObjectSecurity(AdminInterface $admin, $object): void
+    public function createObjectSecurity(AdminInterface $admin, object $object): void
     {
     }
 
-    public function deleteObjectSecurity(AdminInterface $admin, $object): void
+    public function deleteObjectSecurity(AdminInterface $admin, object $object): void
     {
     }
 
+    /**
+     * @param mixed|null $subject
+     */
     private function isAnyGranted(array $attributes, $subject = null): bool
     {
         foreach ($attributes as $attribute) {

@@ -148,12 +148,12 @@ final class FormTypeFieldExtension extends AbstractTypeExtension
         $view->vars['sonata_admin'] = $sonataAdmin;
     }
 
-    public function getExtendedType()
+    public function getExtendedType(): string
     {
         return FormType::class;
     }
 
-    public static function getExtendedTypes()
+    public static function getExtendedTypes(): array
     {
         return [FormType::class];
     }
@@ -174,11 +174,9 @@ final class FormTypeFieldExtension extends AbstractTypeExtension
      * return the value related to FieldDescription, if the associated object does no
      * exists => a temporary one is created.
      *
-     * @param object $object
-     *
-     * @return mixed
+     * @return mixed|null
      */
-    public function getValueFromFieldDescription($object, FieldDescriptionInterface $fieldDescription)
+    public function getValueFromFieldDescription(object $object, FieldDescriptionInterface $fieldDescription)
     {
         $value = null;
 

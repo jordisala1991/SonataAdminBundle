@@ -19,7 +19,6 @@ use Sonata\AdminBundle\Admin\Pool;
 use Sonata\AdminBundle\Builder\BuilderInterface;
 use Sonata\AdminBundle\Mapper\BaseGroupedMapper;
 use Sonata\AdminBundle\Tests\Fixtures\Mapper\AbstractDummyGroupedMapper;
-use Sonata\AdminBundle\Translator\LabelTranslatorStrategyInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -43,16 +42,11 @@ class BaseGroupedMapperTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $labelStrategy = $this->createMock(LabelTranslatorStrategyInterface::class);
-        $labelStrategy
-            ->method('getLabel')
+        $admin
+            ->method('getTranslationLabel')
             ->willReturnCallback(static function (string $label): string {
                 return sprintf('label_%s', strtolower($label));
             });
-
-        $admin
-            ->method('getLabelTranslatorStrategy')
-            ->willReturn($labelStrategy);
 
         $container = $this->getMockForAbstractClass(ContainerInterface::class);
         $configurationPool = new Pool($container, 'myTitle', 'myLogoTitle');

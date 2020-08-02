@@ -27,31 +27,24 @@ interface FilterInterface
     /**
      * Apply the filter to the QueryBuilder instance.
      *
-     * @param string  $alias
-     * @param string  $field
      * @param mixed[] $value
      */
-    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $value);
+    public function filter(ProxyQueryInterface $queryBuilder, string $alias, string $field, array $value): void;
 
     /**
-     * @param mixed $query
      * @param mixed $value
      */
-    public function apply($query, $value);
+    public function apply(ProxyQueryInterface $queryBuilder, $value): void;
 
     /**
      * Returns the filter name.
-     *
-     * @return string
      */
-    public function getName();
+    public function getName(): ?string;
 
     /**
      * Returns the filter form name.
-     *
-     * @return string
      */
-    public function getFormName();
+    public function getFormName(): string;
 
     /**
      * Returns the label name.
@@ -60,111 +53,82 @@ interface FilterInterface
      */
     public function getLabel();
 
-    /**
-     * @param string $label
-     */
-    public function setLabel($label);
+    public function setLabel(string $label): void;
+
+    public function getDefaultOptions(): array;
 
     /**
-     * @return array
-     */
-    public function getDefaultOptions();
-
-    /**
-     * @param string     $name
      * @param mixed|null $default
      *
      * @return mixed
      */
-    public function getOption($name, $default = null);
+    public function getOption(string $name, $default = null);
 
     /**
-     * @param string $name
-     * @param mixed  $value
+     * @param mixed $value
      */
-    public function setOption($name, $value);
+    public function setOption(string $name, $value): void;
 
-    /**
-     * @param string $name
-     */
-    public function initialize($name, array $options = []);
+    public function initialize(string $name, array $options = []): void;
 
-    /**
-     * @return string
-     */
-    public function getFieldName();
+    public function getFieldName(): ?string;
 
     /**
      * @return array<string, string> array of mappings
      */
-    public function getParentAssociationMappings();
+    public function getParentAssociationMappings(): array;
 
     /**
      * @return array<string, string> field mapping
      */
-    public function getFieldMapping();
+    public function getFieldMapping(): array;
 
     /**
      * @return array<string, string>  association mapping
      */
-    public function getAssociationMapping();
+    public function getAssociationMapping(): array;
 
     /**
      * @return array<string, mixed>
      */
-    public function getFieldOptions();
+    public function getFieldOptions(): array;
 
     /**
      * Get field option.
      *
-     * @param string     $name
      * @param mixed|null $default
      *
      * @return mixed
      */
-    public function getFieldOption($name, $default = null);
+    public function getFieldOption(string $name, $default = null);
 
     /**
      * Set field option.
      *
-     * @param string $name
-     * @param mixed  $value
+     * @param mixed $value
      */
-    public function setFieldOption($name, $value);
+    public function setFieldOption(string $name, $value): void;
 
-    /**
-     * @return string
-     */
-    public function getFieldType();
+    public function getFieldType(): string;
 
     /**
      * Returns the main widget used to render the filter.
      *
      * @return array{0: string, 1: array<string, mixed>}
      */
-    public function getRenderSettings();
+    public function getRenderSettings(): array;
 
     /**
      * Returns true if filter is active.
-     *
-     * @return bool
      */
-    public function isActive();
+    public function isActive(): bool;
 
     /**
      * Set the condition to use with the left side of the query : OR or AND.
-     *
-     * @param string $condition
      */
-    public function setCondition($condition);
+    public function setCondition(string $condition): void;
 
-    /**
-     * @return string
-     */
-    public function getCondition();
+    public function getCondition(): ?string;
 
-    /**
-     * @return string
-     */
-    public function getTranslationDomain();
+    public function getTranslationDomain(): ?string;
 }

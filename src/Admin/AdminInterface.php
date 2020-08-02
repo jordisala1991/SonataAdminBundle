@@ -48,11 +48,11 @@ interface AdminInterface extends AccessRegistryInterface, FieldDescriptionRegist
 
     public function setListBuilder(ListBuilderInterface $listBuilder): void;
 
-    public function getListBuilder(): ?ListBuilderInterface;
+    public function getListBuilder(): ListBuilderInterface;
 
     public function setDatagridBuilder(DatagridBuilderInterface $datagridBuilder): void;
 
-    public function getDatagridBuilder(): ?DatagridBuilderInterface;
+    public function getDatagridBuilder(): DatagridBuilderInterface;
 
     public function setTranslator(TranslatorInterface $translator): void;
 
@@ -92,18 +92,15 @@ interface AdminInterface extends AccessRegistryInterface, FieldDescriptionRegist
      */
     public function setTemplate(string $name, string $template): void;
 
-    public function getModelManager(): ?ModelManagerInterface;
+    public function getModelManager(): ModelManagerInterface;
 
     /**
-     * @return string the manager type of the admin
+     * @return string|null the manager type of the admin
      */
     public function getManagerType(): ?string;
 
     public function createQuery(): ProxyQueryInterface;
 
-    /**
-     * @return FormBuilderInterface the form builder
-     */
     public function getFormBuilder(): FormBuilderInterface;
 
     /**
@@ -140,7 +137,7 @@ interface AdminInterface extends AccessRegistryInterface, FieldDescriptionRegist
      *
      * @return FieldDescriptionInterface The parent field description
      */
-    public function getParentFieldDescription(): ?FieldDescriptionInterface;
+    public function getParentFieldDescription(): FieldDescriptionInterface;
 
     /**
      * Returns true if the Admin is linked to a parent FieldDescription.
@@ -162,23 +159,19 @@ interface AdminInterface extends AccessRegistryInterface, FieldDescriptionRegist
     public function getSecurityHandler(): ?SecurityHandlerInterface;
 
     /**
-     * @param string $name
+     * @param string|array $name
      */
     public function isGranted($name, ?object $object = null): bool;
 
     /**
-     * @param mixed $model
-     *
-     * @return string a string representation of the identifiers for this instance
+     * @return string|null a string representation of the identifiers for this instance
      */
-    public function getNormalizedIdentifier($model): ?string;
+    public function getNormalizedIdentifier(object $model): ?string;
 
     /**
      * Shorthand method for templating.
-     *
-     * @param object $model
      */
-    public function id($model): ?string;
+    public function id(object $model): ?string;
 
     public function setValidator(ValidatorInterface $validator): void;
 
@@ -215,10 +208,7 @@ interface AdminInterface extends AccessRegistryInterface, FieldDescriptionRegist
 
     public function getRouteBuilder(): ?RouteBuilderInterface;
 
-    /**
-     * @param object $object
-     */
-    public function toString($object): string;
+    public function toString(object $object): string;
 
     public function setLabelTranslatorStrategy(LabelTranslatorStrategyInterface $labelTranslatorStrategy): void;
 
@@ -242,8 +232,6 @@ interface AdminInterface extends AccessRegistryInterface, FieldDescriptionRegist
 
     /**
      * Returns the classname label.
-     *
-     * @return string the classname label
      */
     public function getClassnameLabel(): string;
 
@@ -293,12 +281,10 @@ interface AdminInterface extends AccessRegistryInterface, FieldDescriptionRegist
     /**
      * NEXT_MAJOR: remove this method.
      *
-     * @param object $object
-     *
      * @deprecated this feature cannot be stable, use a custom validator,
      *             the feature will be removed with Symfony 2.2
      */
-    public function validate(ErrorElement $errorElement, $object): void;
+    public function validate(ErrorElement $errorElement, object $object): void;
 
     public function showIn(string $context): bool;
 
@@ -318,8 +304,6 @@ interface AdminInterface extends AccessRegistryInterface, FieldDescriptionRegist
 
     /**
      * Set the translation domain.
-     *
-     * @param string $translationDomain the translation domain
      */
     public function setTranslationDomain(string $translationDomain): void;
 
@@ -395,8 +379,6 @@ interface AdminInterface extends AccessRegistryInterface, FieldDescriptionRegist
 
     /**
      * Returns true if the admin has the sub classes.
-     *
-     * @param string $name The name of the sub class
      */
     public function hasSubClass(string $name): bool;
 
@@ -438,6 +420,9 @@ interface AdminInterface extends AccessRegistryInterface, FieldDescriptionRegist
      */
     public function getPersistentParameters(): array;
 
+    /**
+     * @return mixed|null
+     */
     public function getPersistentParameter(string $name);
 
     /**
@@ -455,10 +440,7 @@ interface AdminInterface extends AccessRegistryInterface, FieldDescriptionRegist
      */
     public function getTranslationLabel(string $label, string $context = '', string $type = ''): string;
 
-    /**
-     * @param object $object
-     */
-    public function getObjectMetadata($object): MetadataInterface;
+    public function getObjectMetadata(object $object): MetadataInterface;
 
     /**
      * @return array<string, array<string, mixed>>
@@ -544,7 +526,7 @@ interface AdminInterface extends AccessRegistryInterface, FieldDescriptionRegist
      */
     public function getParentAssociationMapping(): ?string;
 
-    public function reorderFormGroup(string $group, array $keys): void;
+    public function reorderFormGroup(?string $group, array $keys): void;
 
     /**
      * This method is being called by the main admin class and the child class,

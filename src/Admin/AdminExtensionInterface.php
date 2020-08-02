@@ -27,15 +27,15 @@ use Sonata\Form\Validator\ErrorElement;
  */
 interface AdminExtensionInterface
 {
-    public function configureFormFields(FormMapper $formMapper);
+    public function configureFormFields(FormMapper $formMapper): void;
 
-    public function configureListFields(ListMapper $listMapper);
+    public function configureListFields(ListMapper $listMapper): void;
 
-    public function configureDatagridFilters(DatagridMapper $datagridMapper);
+    public function configureDatagridFilters(DatagridMapper $datagridMapper): void;
 
-    public function configureShowFields(ShowMapper $showMapper);
+    public function configureShowFields(ShowMapper $showMapper): void;
 
-    public function configureRoutes(AdminInterface $admin, RouteCollectionInterface $collection);
+    public function configureRoutes(AdminInterface $admin, RouteCollectionInterface $collection): void;
 
     /**
      * Builds the tab menu.
@@ -97,8 +97,6 @@ interface AdminExtensionInterface
 
     /**
      * Get all action buttons for an action.
-     *
-     * @param object $object
      */
     public function configureActionButtons(
         AdminInterface $admin,

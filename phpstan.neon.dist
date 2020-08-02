@@ -2,10 +2,12 @@ includes:
     - phpstan-baseline.neon
 
 parameters:
-    level: 2
+    level: 8
 
     paths:
         - src
     excludes_analyse:
         # temporarily ignore template files
         - src/Resources/**.tpl.php
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false

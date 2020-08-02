@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\AdminBundle\Model;
 
+use Doctrine\Common\Collections\Collection;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
@@ -24,71 +25,38 @@ use Sonata\Exporter\Source\SourceIteratorInterface;
  */
 interface ModelManagerInterface extends DatagridManagerInterface
 {
-    /**
-     * @param string $class
-     * @param string $name
-     *
-     * @return FieldDescriptionInterface
-     */
-    public function getNewFieldDescriptionInstance($class, $name, array $options = []);
+    public function getNewFieldDescriptionInstance(string $class, string $name, array $options = []): FieldDescriptionInterface;
 
     /**
-     * @param object $object
-     *
      * @throws ModelManagerException
      */
-    public function create($object);
+    public function create(object $object): void;
 
     /**
-     * @param object $object
-     *
      * @throws ModelManagerException
      */
-    public function update($object);
+    public function update(object $object): void;
 
     /**
-     * @param object $object
-     *
      * @throws ModelManagerException
      */
-    public function delete($object);
+    public function delete(object $object): void;
+
+    public function findBy(string $class, array $criteria = []): array;
+
+    public function findOneBy(string $class, array $criteria = []): ?object;
 
     /**
-     * @param string $class
-     *
-     * @return array all objects matching the criteria
+     * @param mixed $id
      */
-    public function findBy($class, array $criteria = []);
+    public function find(string $class, $id): ?object;
 
     /**
-     * @param string $class
-     *
-     * @return object|null an object matching the criteria or null if none match
-     */
-    public function findOneBy($class, array $criteria = []);
-
-    /**
-     * @param string $class
-     * @param mixed  $id
-     *
-     * @return object|null the object with id or null if not found
-     */
-    public function find($class, $id);
-
-    /**
-     * @param string $class
-     *
      * @throws ModelManagerException
      */
-    public function batchDelete($class, ProxyQueryInterface $queryProxy);
+    public function batchDelete(string $class, ProxyQueryInterface $queryProxy): void;
 
-    /**
-     * @param string $class
-     * @param string $alias
-     *
-     * @return ProxyQueryInterface
-     */
-    public function createQuery($class, $alias = 'o');
+    public function createQuery(string $class, string $alias = 'o'): ProxyQueryInterface;
 
     /**
      * Get the identifiers of this model class.
@@ -96,136 +64,74 @@ interface ModelManagerInterface extends DatagridManagerInterface
      * This returns an array to handle cases like a primary key that is
      * composed of multiple columns. If you need a string representation,
      * use getNormalizedIdentifier resp. getUrlSafeIdentifier
-     *
-     * @param object $model
-     *
-     * @return array list of all identifiers of this model
      */
-    public function getIdentifierValues($model);
+    public function getIdentifierValues(object $model): array;
 
     /**
      * Get a list of the field names models of the specified class use to store
      * the identifier.
-     *
-     * @param string $class fully qualified class name
-     *
-     * @return array
      */
-    public function getIdentifierFieldNames($class);
+    public function getIdentifierFieldNames(?string $class): array;
 
     /**
      * Get the identifiers for this model class as a string.
-     *
-     * @param object $model
-     *
-     * @return string a string representation of the identifiers for this
-     *                instance
      */
-    public function getNormalizedIdentifier($model);
+    public function getNormalizedIdentifier(object $model): string;
 
     /**
      * Get the identifiers as a string that is safe to use in a url.
      *
      * This is similar to getNormalizedIdentifier but guarantees an id that can
      * be used in a URL.
-     *
-     * @param object $model
-     *
-     * @return string string representation of the id that is safe to use in a url
      */
-    public function getUrlSafeIdentifier($model);
+    public function getUrlSafeIdentifier(object $model): string;
 
     /**
      * Create a new instance of the model of the specified class.
-     *
-     * @param string $class
-     *
-     * @return object
      */
-    public function getModelInstance($class);
+    public function getModelInstance(string $class): object;
 
-    /**
-     * @param string $class
-     *
-     * @return array|\ArrayAccess
-     */
-    public function getModelCollectionInstance($class);
+    public function getModelCollectionInstance(string $class): Collection;
 
     /**
      * Removes an element from the collection.
-     *
-     * @param array  $collection
-     * @param object $element
      */
-    public function collectionRemoveElement(&$collection, &$element);
+    public function collectionRemoveElement(array &$collection, object &$element): bool;
 
     /**
      * Add an element from the collection.
-     *
-     * @param array  $collection
-     * @param object $element
      */
-    public function collectionAddElement(&$collection, &$element);
+    public function collectionAddElement(array &$collection, object &$element): bool;
 
     /**
      * Check if the element exists in the collection.
-     *
-     * @param array  $collection
-     * @param object $element
-     *
-     * @return bool
      */
-    public function collectionHasElement(&$collection, &$element);
+    public function collectionHasElement(array &$collection, object &$element): bool;
 
     /**
      * Clear the collection.
-     *
-     * @param array $collection
      */
-    public function collectionClear(&$collection);
+    public function collectionClear(array &$collection): void;
 
-    /**
-     * @param string $class
-     *
-     * @return object
-     */
-    public function modelReverseTransform($class, array $array = []);
+    public function modelReverseTransform(string $class, array $array = []): object;
 
-    /**
-     * @param string $class
-     * @param object $instance
-     *
-     * @return object
-     */
-    public function modelTransform($class, $instance);
+    public function modelTransform(string $class, object $instance): object;
 
     /**
      * @param mixed $query
+     *
+     * @return mixed
      */
     public function executeQuery($query);
 
-    /**
-     * @param int|null $firstResult
-     * @param int|null $maxResult
-     *
-     * @return SourceIteratorInterface
-     */
     public function getDataSourceIterator(
         DatagridInterface $datagrid,
         array $fields,
-        $firstResult = null,
-        $maxResult = null
-    );
+        ?int $firstResult = null,
+        ?int $maxResult = null
+    ): SourceIteratorInterface;
 
-    /**
-     * @param string $class
-     *
-     * @return string[]
-     */
-    public function getExportFields($class);
+    public function getExportFields(string $class): array;
 
-    /**
-     * @param string $class
-     */
-    public function addIdentifiersToQuery($class, ProxyQueryInterface $query, array $idx);
+    public function addIdentifiersToQuery(string $class, ProxyQueryInterface $query, array $idx): void;
 }

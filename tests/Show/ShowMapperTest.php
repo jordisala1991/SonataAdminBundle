@@ -116,11 +116,11 @@ class ShowMapperTest extends TestCase
             ->method('getModelManager')
             ->willReturn($modelManager);
 
-        $labelTranslatorStrategy = new NoopLabelTranslatorStrategy();
-
         $this->admin
-            ->method('getLabelTranslatorStrategy')
-            ->willReturn($labelTranslatorStrategy);
+            ->method('getTranslationLabel')
+            ->willReturnCallback(static function (string $label): string {
+                return $label;
+            });
 
         $this->admin
             ->method('hasShowFieldDescription')

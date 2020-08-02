@@ -113,9 +113,6 @@ class FilterTest extends TestCase
 
     /**
      * @dataProvider isActiveData
-     *
-     * @param $expected
-     * @param $value
      */
     public function testIsActive(bool $expected, array $value): void
     {

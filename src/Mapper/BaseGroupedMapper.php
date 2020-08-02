@@ -70,7 +70,7 @@ abstract class BaseGroupedMapper extends BaseMapper
             'collapsed' => false,
             'class' => false,
             'description' => false,
-            'label' => $this->admin->getLabelTranslatorStrategy()->getLabel($name, $this->getName(), 'group'),
+            'label' => $this->admin->getTranslationLabel($name, $this->getName(), 'group'),
             'translation_domain' => null,
             'name' => $name,
             'box_class' => 'box box-primary',
@@ -242,7 +242,7 @@ abstract class BaseGroupedMapper extends BaseMapper
     /**
      * Add the field name to the current group.
      */
-    protected function addFieldToCurrentGroup(string $fieldName): array
+    protected function addFieldToCurrentGroup(?string $fieldName): array
     {
         // Note this line must happen before the next line.
         // See https://github.com/sonata-project/SonataAdminBundle/pull/1351
@@ -261,7 +261,7 @@ abstract class BaseGroupedMapper extends BaseMapper
      * Note that this can have the side effect to change the 'group' value
      * returned by the getGroup function
      */
-    protected function getCurrentGroupName(): string
+    protected function getCurrentGroupName(): ?string
     {
         if (!$this->currentGroup) {
             $this->with($this->admin->getLabel() ?: 'default', ['auto_created' => true]);

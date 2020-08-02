@@ -25,33 +25,27 @@ interface AclSecurityHandlerInterface extends SecurityHandlerInterface
     /**
      * Set the permissions not related to an object instance and also to be available when objects do not exist.
      */
-    public function setAdminPermissions(array $permissions);
+    public function setAdminPermissions(array $permissions): void;
 
     /**
      * Return the permissions not related to an object instance and also to be available when objects do not exist.
-     *
-     * @return array
      */
-    public function getAdminPermissions();
+    public function getAdminPermissions(): array;
 
     /**
      * Set the permissions related to an object instance.
      */
-    public function setObjectPermissions(array $permissions);
+    public function setObjectPermissions(array $permissions): void;
 
     /**
      * Return the permissions related to an object instance.
-     *
-     * @return array
      */
-    public function getObjectPermissions();
+    public function getObjectPermissions(): array;
 
     /**
      * Get the ACL for the passed object identity.
-     *
-     * @return AclInterface|null or NULL if not found
      */
-    public function getObjectAcl(ObjectIdentityInterface $objectIdentity);
+    public function getObjectAcl(ObjectIdentityInterface $objectIdentity): ?AclInterface;
 
     /**
      * Find the ACLs for the passed object identities.
@@ -60,53 +54,45 @@ interface AclSecurityHandlerInterface extends SecurityHandlerInterface
      * @param array        $sids an array of SecurityIdentityInterface implementations
      *
      * @throws \Exception
-     *
-     * @return \SplObjectStorage mapping the passed object identities to ACLs
      */
-    public function findObjectAcls(\Traversable $oids, array $sids = []);
+    public function findObjectAcls(\Traversable $oids, array $sids = []): \SplObjectStorage;
 
     /**
      * Add an object owner ACE to the object ACL.
      */
-    public function addObjectOwner(AclInterface $acl, ?UserSecurityIdentity $securityIdentity = null);
+    public function addObjectOwner(AclInterface $acl, ?UserSecurityIdentity $securityIdentity = null): void;
 
     /**
      * Add the object class ACE's to the object ACL.
      */
-    public function addObjectClassAces(AclInterface $acl, array $roleInformation = []);
+    public function addObjectClassAces(AclInterface $acl, array $roleInformation = []): void;
 
     /**
      * Create an object ACL.
-     *
-     * @return AclInterface
      */
-    public function createAcl(ObjectIdentityInterface $objectIdentity);
+    public function createAcl(ObjectIdentityInterface $objectIdentity): AclInterface;
 
     /**
      * Update the ACL.
      */
-    public function updateAcl(AclInterface $acl);
+    public function updateAcl(AclInterface $acl): void;
 
     /**
      * Delete the ACL.
      */
-    public function deleteAcl(ObjectIdentityInterface $objectIdentity);
+    public function deleteAcl(ObjectIdentityInterface $objectIdentity): void;
 
     /**
      * Helper method to find the index of a class ACE for a role.
      *
-     * @param string $role
-     *
      * @return mixed index if found, FALSE if not found
      */
-    public function findClassAceIndexByRole(AclInterface $acl, $role);
+    public function findClassAceIndexByRole(AclInterface $acl, string $role);
 
     /**
      * Helper method to find the index of a class ACE for a username.
      *
-     * @param string $username
-     *
      * @return mixed index if found, FALSE if not found
      */
-    public function findClassAceIndexByUsername(AclInterface $acl, $username);
+    public function findClassAceIndexByUsername(AclInterface $acl, string $username);
 }

@@ -74,6 +74,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormRegistry;
 use Symfony\Component\Form\ResolvedFormTypeFactory;
+use Symfony\Component\Form\Test\FormInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -605,18 +606,17 @@ class AdminTest extends TestCase
         // To string method is implemented, but returns null
         $s = new FooToStringNull();
         $this->assertNotEmpty($admin->toString($s));
-
-        $this->assertSame('', $admin->toString(false));
     }
 
     public function testIsAclEnabled(): void
     {
         $postAdmin = new PostAdmin('sonata.post.admin.post', 'NewsBundle\Entity\Post', 'Sonata\NewsBundle\Controller\PostAdminController');
+        $postAdmin->setSecurityHandler($this->createStub(SecurityHandlerInterface::class));
 
         $this->assertFalse($postAdmin->isAclEnabled());
 
         $commentAdmin = new CommentAdmin('sonata.post.admin.comment', 'Application\Sonata\NewsBundle\Entity\Comment', 'Sonata\NewsBundle\Controller\CommentAdminController');
-        $commentAdmin->setSecurityHandler($this->createMock(AclSecurityHandlerInterface::class));
+        $commentAdmin->setSecurityHandler($this->createStub(AclSecurityHandlerInterface::class));
         $this->assertTrue($commentAdmin->isAclEnabled());
     }
 
@@ -729,12 +729,11 @@ class AdminTest extends TestCase
 
     public function testGetLabelTranslatorStrategy(): void
     {
-        $admin = new PostAdmin('sonata.post.admin.post', 'NewsBundle\Entity\Post', 'Sonata\NewsBundle\Controller\PostAdminController');
-
-        $this->assertNull($admin->getLabelTranslatorStrategy());
-
         $labelTranslatorStrategy = $this->createMock(LabelTranslatorStrategyInterface::class);
+
+        $admin = new PostAdmin('sonata.post.admin.post', 'NewsBundle\Entity\Post', 'Sonata\NewsBundle\Controller\PostAdminController');
         $admin->setLabelTranslatorStrategy($labelTranslatorStrategy);
+
         $this->assertSame($labelTranslatorStrategy, $admin->getLabelTranslatorStrategy());
     }
 
@@ -809,12 +808,11 @@ class AdminTest extends TestCase
 
     public function testGetSecurityHandler(): void
     {
+        $securityHandler = $this->createStub(SecurityHandlerInterface::class);
+
         $admin = new PostAdmin('sonata.post.admin.post', 'NewsBundle\Entity\Post', 'Sonata\NewsBundle\Controller\PostAdminController');
-
-        $this->assertNull($admin->getSecurityHandler());
-
-        $securityHandler = $this->createMock(SecurityHandlerInterface::class);
         $admin->setSecurityHandler($securityHandler);
+
         $this->assertSame($securityHandler, $admin->getSecurityHandler());
     }
 
@@ -845,13 +843,11 @@ class AdminTest extends TestCase
 
     public function testGetModelManager(): void
     {
+        $modelManager = $this->createStub(ModelManagerInterface::class);
+
         $admin = new PostAdmin('sonata.post.admin.post', 'NewsBundle\Entity\Post', 'Sonata\NewsBundle\Controller\PostAdminController');
-
-        $this->assertNull($admin->getModelManager());
-
-        $modelManager = $this->createMock(ModelManagerInterface::class);
-
         $admin->setModelManager($modelManager);
+
         $this->assertSame($modelManager, $admin->getModelManager());
     }
 
@@ -880,75 +876,61 @@ class AdminTest extends TestCase
 
     public function testGetRouteGenerator(): void
     {
+        $routeGenerator = $this->createStub(RouteGeneratorInterface::class);
+
         $admin = new PostAdmin('sonata.post.admin.post', 'NewsBundle\Entity\Post', 'Sonata\NewsBundle\Controller\PostAdminController');
-
-        $this->assertNull($admin->getRouteGenerator());
-
-        $routeGenerator = $this->createMock(RouteGeneratorInterface::class);
-
         $admin->setRouteGenerator($routeGenerator);
+
         $this->assertSame($routeGenerator, $admin->getRouteGenerator());
     }
 
     public function testGetConfigurationPool(): void
     {
+        $pool = $this->createStub(Pool::class);
+
         $admin = new PostAdmin('sonata.post.admin.post', 'NewsBundle\Entity\Post', 'Sonata\NewsBundle\Controller\PostAdminController');
-
-        $this->assertNull($admin->getConfigurationPool());
-
-        $pool = $this->getMockBuilder(Pool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $admin->setConfigurationPool($pool);
+
         $this->assertSame($pool, $admin->getConfigurationPool());
     }
 
     public function testGetShowBuilder(): void
     {
+        $showBuilder = $this->createStub(ShowBuilderInterface::class);
+
         $admin = new PostAdmin('sonata.post.admin.post', 'NewsBundle\Entity\Post', 'Sonata\NewsBundle\Controller\PostAdminController');
-
-        $this->assertNull($admin->getShowBuilder());
-
-        $showBuilder = $this->createMock(ShowBuilderInterface::class);
-
         $admin->setShowBuilder($showBuilder);
+
         $this->assertSame($showBuilder, $admin->getShowBuilder());
     }
 
     public function testGetListBuilder(): void
     {
-        $admin = new PostAdmin('sonata.post.admin.post', 'NewsBundle\Entity\Post', 'Sonata\NewsBundle\Controller\PostAdminController');
-
-        $this->assertNull($admin->getListBuilder());
-
         $listBuilder = $this->createMock(ListBuilderInterface::class);
 
+        $admin = new PostAdmin('sonata.post.admin.post', 'NewsBundle\Entity\Post', 'Sonata\NewsBundle\Controller\PostAdminController');
         $admin->setListBuilder($listBuilder);
+
         $this->assertSame($listBuilder, $admin->getListBuilder());
     }
 
     public function testGetDatagridBuilder(): void
     {
+        $datagridBuilder = $this->createStub(DatagridBuilderInterface::class);
+
         $admin = new PostAdmin('sonata.post.admin.post', 'NewsBundle\Entity\Post', 'Sonata\NewsBundle\Controller\PostAdminController');
-
-        $this->assertNull($admin->getDatagridBuilder());
-
-        $datagridBuilder = $this->createMock(DatagridBuilderInterface::class);
-
         $admin->setDatagridBuilder($datagridBuilder);
+
         $this->assertSame($datagridBuilder, $admin->getDatagridBuilder());
     }
 
     public function testGetFormContractor(): void
     {
+        $formContractor = $this->createStub(FormContractorInterface::class);
+
         $admin = new PostAdmin('sonata.post.admin.post', 'NewsBundle\Entity\Post', 'Sonata\NewsBundle\Controller\PostAdminController');
-
-        $this->assertNull($admin->getFormContractor());
-
-        $formContractor = $this->createMock(FormContractorInterface::class);
-
         $admin->setFormContractor($formContractor);
+
         $this->assertSame($formContractor, $admin->getFormContractor());
     }
 
@@ -1417,8 +1399,8 @@ class AdminTest extends TestCase
 
         $validator = $this->createMock(ValidatorInterface::class);
         $validator
-                ->method('getMetadataFor')
-                ->willReturn($this->createMock(MemberMetadata::class));
+            ->method('getMetadataFor')
+            ->willReturn($this->createMock(MemberMetadata::class));
         $modelAdmin->setValidator($validator);
 
         $modelManager = $this->createMock(ModelManagerInterface::class);
@@ -1430,31 +1412,37 @@ class AdminTest extends TestCase
         // a Admin class to test that preValidate is called
         $testAdminPreValidate = $this->createMock(AbstractAdmin::class);
         $testAdminPreValidate->expects($this->once())
-                ->method('preValidate')
-                ->with($this->identicalTo($object));
+            ->method('preValidate')
+            ->with($this->identicalTo($object));
 
         $event = $this->createMock(FormEvent::class);
         $event
-                ->method('getData')
-                ->willReturn($object);
+            ->method('getData')
+            ->willReturn($object);
+
+        $form = $this->createStub(FormInterface::class);
 
         $formBuild = $this->createMock(FormBuilder::class);
         $formBuild->expects($this->once())
-                ->method('addEventListener')
-                ->with(
-                    $this->identicalTo(FormEvents::POST_SUBMIT),
-                    $this->callback(static function ($callback) use ($testAdminPreValidate, $event): bool {
-                        if (\is_callable($callback)) {
-                            $closure = $callback->bindTo($testAdminPreValidate);
-                            $closure($event);
+            ->method('addEventListener')
+            ->with(
+                $this->identicalTo(FormEvents::POST_SUBMIT),
+                $this->callback(static function ($callback) use ($testAdminPreValidate, $event): bool {
+                    if (\is_callable($callback)) {
+                        $closure = $callback->bindTo($testAdminPreValidate);
+                        $closure($event);
 
-                            return true;
-                        }
+                        return true;
+                    }
 
-                        return false;
-                    }),
-                    $this->greaterThan(0)
-                );
+                    return false;
+                }),
+                $this->greaterThan(0)
+            );
+
+        $formBuild->expects($this->once())
+            ->method('getForm')
+            ->willReturn($form);
 
         $formContractor = $this->createMock(FormContractorInterface::class);
         $formContractor
@@ -1697,10 +1685,7 @@ class AdminTest extends TestCase
         $modelAdmin->getSideMenu('foo');
     }
 
-    /**
-     * @return array
-     */
-    public function provideGetSubject()
+    public function provideGetSubject(): array
     {
         return [
             [23],

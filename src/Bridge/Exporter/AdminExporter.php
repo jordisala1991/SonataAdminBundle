@@ -37,8 +37,6 @@ final class AdminExporter
     /**
      * Queries an admin for its default export formats, and falls back on global settings.
      *
-     * @param AdminInterface $admin the current admin object
-     *
      * @return string[] an array of formats
      */
     public function getAvailableFormats(AdminInterface $admin): array

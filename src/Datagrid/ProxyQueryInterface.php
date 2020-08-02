@@ -21,81 +21,40 @@ namespace Sonata\AdminBundle\Datagrid;
 interface ProxyQueryInterface
 {
     /**
-     * @param string $name
-     * @param array  $args
-     *
      * @return mixed
      */
-    public function __call($name, $args);
+    public function __call(string $name, array $args);
 
     /**
-     * @param int|null $hydrationMode
-     *
      * @return mixed
      */
-    public function execute(array $params = [], $hydrationMode = null);
+    public function execute(array $params = [], ?int $hydrationMode = null);
 
-    /**
-     * @param array $parentAssociationMappings
-     * @param array $fieldMapping
-     *
-     * @return ProxyQueryInterface
-     */
-    public function setSortBy($parentAssociationMappings, $fieldMapping);
+    public function setSortBy(array $parentAssociationMappings, array $fieldMapping): self;
 
-    /**
-     * @return string
-     */
-    public function getSortBy();
+    public function getSortBy(): string;
 
-    /**
-     * @param string $sortOrder
-     *
-     * @return ProxyQueryInterface
-     */
-    public function setSortOrder($sortOrder);
+    public function setSortOrder(string $sortOrder): self;
 
-    /**
-     * @return string
-     */
-    public function getSortOrder();
+    public function getSortOrder(): string;
 
     /**
      * @return mixed
      */
     public function getSingleScalarResult();
 
-    /**
-     * @param int|null $firstResult
-     *
-     * @return ProxyQueryInterface
-     */
-    public function setFirstResult($firstResult);
+    public function setFirstResult(?int $firstResult): self;
 
     /**
      * @return mixed
      */
     public function getFirstResult();
 
-    /**
-     * @param int|null $maxResults
-     *
-     * @return ProxyQueryInterface
-     */
-    public function setMaxResults($maxResults);
+    public function setMaxResults(?int $maxResults): self;
 
-    /**
-     * @return int|null
-     */
-    public function getMaxResults();
+    public function getMaxResults(): ?int;
 
-    /**
-     * @return int
-     */
-    public function getUniqueParameterId();
+    public function getUniqueParameterId(): int;
 
-    /**
-     * @return string
-     */
-    public function entityJoin(array $associationMappings);
+    public function entityJoin(array $associationMappings): string;
 }

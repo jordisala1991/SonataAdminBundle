@@ -25,9 +25,9 @@ final class NumberOperatorType extends AbstractType
     public const TYPE_LESS_EQUAL = 4;
     public const TYPE_LESS_THAN = 5;
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults($defaultOptions = [
+        $resolver->setDefaults([
             'choice_translation_domain' => 'SonataAdminBundle',
             'choices' => [
                 'label_type_equal' => self::TYPE_EQUAL,

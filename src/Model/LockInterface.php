@@ -21,17 +21,16 @@ use Sonata\AdminBundle\Exception\LockException;
 interface LockInterface extends ModelManagerInterface
 {
     /**
-     * @param object $object
+     * @param mixed $object
      *
      * @return mixed|null
      */
     public function getLockVersion($object);
 
     /**
-     * @param object $object
-     * @param mixed  $expectedVersion
+     * @param mixed $expectedVersion
      *
      * @throws LockException
      */
-    public function lock($object, $expectedVersion);
+    public function lock(object $object, $expectedVersion): void;
 }

@@ -244,13 +244,9 @@ class ConfigurationTest extends TestCase
     }
 
     /**
-     * Processes an array of configurations and returns a compiled version.
-     *
-     * @param array $configs An array of raw configurations
-     *
-     * @return array A normalized array
+     * Processes an array of raw configurations and returns a normalized version.
      */
-    protected function process($configs): array
+    protected function process(array $configs): array
     {
         $processor = new Processor();
 

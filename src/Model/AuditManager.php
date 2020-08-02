@@ -23,11 +23,6 @@ final class AuditManager implements AuditManagerInterface
     /**
      * @var array
      */
-    private $classes = [];
-
-    /**
-     * @var array
-     */
     private $readers = [];
 
     /**
@@ -40,12 +35,12 @@ final class AuditManager implements AuditManagerInterface
         $this->container = $container;
     }
 
-    public function setReader($serviceId, array $classes): void
+    public function setReader(string $serviceId, array $classes): void
     {
         $this->readers[$serviceId] = $classes;
     }
 
-    public function hasReader($class)
+    public function hasReader(string $class): bool
     {
         foreach ($this->readers as $classes) {
             if (\in_array($class, $classes, true)) {
@@ -56,7 +51,7 @@ final class AuditManager implements AuditManagerInterface
         return false;
     }
 
-    public function getReader($class)
+    public function getReader(string $class): AuditReaderInterface
     {
         foreach ($this->readers as $readerId => $classes) {
             if (\in_array($class, $classes, true)) {

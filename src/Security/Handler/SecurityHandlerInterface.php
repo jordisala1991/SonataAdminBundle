@@ -23,34 +23,26 @@ interface SecurityHandlerInterface
     /**
      * @param string|array $attributes
      * @param mixed|null   $object
-     *
-     * @return bool
      */
-    public function isGranted(AdminInterface $admin, $attributes, $object = null);
+    public function isGranted(AdminInterface $admin, $attributes, $object = null): bool;
 
     /**
      * Get a sprintf template to get the role.
-     *
-     * @return string
      */
-    public function getBaseRole(AdminInterface $admin);
+    public function getBaseRole(AdminInterface $admin): string;
 
     /**
      * @return array<string, mixed>
      */
-    public function buildSecurityInformation(AdminInterface $admin);
+    public function buildSecurityInformation(AdminInterface $admin): array;
 
     /**
      * Create object security, fe. make the current user owner of the object.
-     *
-     * @param object $object
      */
-    public function createObjectSecurity(AdminInterface $admin, $object);
+    public function createObjectSecurity(AdminInterface $admin, object $object): void;
 
     /**
      * Remove object security.
-     *
-     * @param object $object
      */
-    public function deleteObjectSecurity(AdminInterface $admin, $object);
+    public function deleteObjectSecurity(AdminInterface $admin, object $object): void;
 }

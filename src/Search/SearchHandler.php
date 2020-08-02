@@ -42,15 +42,11 @@ class SearchHandler
     }
 
     /**
-     * @param string $term
-     * @param int    $page
-     * @param int    $offset
-     *
      * @throws \RuntimeException
      *
      * @return PagerInterface|false
      */
-    public function search(AdminInterface $admin, $term, $page = 0, $offset = 20)
+    public function search(AdminInterface $admin, string $term, int $page = 0, int $offset = 20)
     {
         $datagrid = $admin->getDatagrid();
 
