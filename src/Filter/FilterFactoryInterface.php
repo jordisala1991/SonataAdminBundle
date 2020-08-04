@@ -18,5 +18,8 @@ namespace Sonata\AdminBundle\Filter;
  */
 interface FilterFactoryInterface
 {
+    /**
+     * @param array<string, mixed> $options
+     */
     public function create(string $name, string $type, array $options = []): FilterInterface;
 }

@@ -49,6 +49,7 @@ class ShowMapper extends BaseGroupedMapper
 
     /**
      * @param FieldDescriptionInterface|string $name
+     * @param array<string, mixed> $fieldDescriptionOptions
      *
      * @throws \LogicException
      */
@@ -169,21 +170,33 @@ class ShowMapper extends BaseGroupedMapper
         return $this;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function getGroups(): array
     {
         return $this->admin->getShowGroups();
     }
 
+    /**
+     * @param array<string, mixed> $groups
+     */
     protected function setGroups(array $groups): void
     {
         $this->admin->setShowGroups($groups);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function getTabs(): array
     {
         return $this->admin->getShowTabs();
     }
 
+    /**
+     * @param array<string, mixed> $tabs
+     */
     protected function setTabs(array $tabs): void
     {
         $this->admin->setShowTabs($tabs);

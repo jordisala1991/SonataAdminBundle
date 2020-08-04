@@ -36,6 +36,9 @@ final class MopaCompatibilityTypeFieldExtension extends AbstractTypeExtension
         ]);
     }
 
+    /**
+     * @param array<string, mixed> $options
+     */
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $view->vars['horizontal_label_class'] = $options['horizontal_label_class'];
@@ -48,6 +51,9 @@ final class MopaCompatibilityTypeFieldExtension extends AbstractTypeExtension
         return FormType::class;
     }
 
+    /**
+     * @return string[]
+     */
     public static function getExtendedTypes(): array
     {
         return [FormType::class];

@@ -39,7 +39,18 @@ final class AdminPermissionMap implements PermissionMapInterface
      * Map each permission to the permissions it should grant access for
      * fe. grant access for the view permission if the user has the edit permission.
      *
-     * @var array
+     * @var array{
+     *     'VIEW': int[],
+     *     'EDIT': int[],
+     *     'CREATE': int[],
+     *     'DELETE': int[],
+     *     'UNDELETE': int[],
+     *     'LIST': int[],
+     *     'EXPORT': int[],
+     *     'OPERATOR': int[],
+     *     'MASTER': int[],
+     *     'OWNER': int[],
+     * }
      */
     private $map = [
         self::PERMISSION_VIEW => [
@@ -109,6 +120,9 @@ final class AdminPermissionMap implements PermissionMapInterface
         ],
     ];
 
+    /**
+     * @return int[]|null
+     */
     public function getMasks($permission, $object): ?array
     {
         if (!isset($this->map[$permission])) {

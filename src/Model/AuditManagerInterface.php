@@ -20,6 +20,8 @@ interface AuditManagerInterface
 {
     /**
      * Set AuditReaderInterface service id for array of $classes.
+     *
+     * @param string[] $classes
      */
     public function setReader(string $serviceId, array $classes): void;
 

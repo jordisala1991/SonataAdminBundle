@@ -55,6 +55,9 @@ interface FilterInterface
 
     public function setLabel(string $label): void;
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getDefaultOptions(): array;
 
     /**
@@ -69,6 +72,9 @@ interface FilterInterface
      */
     public function setOption(string $name, $value): void;
 
+    /**
+     * @param array<string, mixed> $options
+     */
     public function initialize(string $name, array $options = []): void;
 
     public function getFieldName(): ?string;

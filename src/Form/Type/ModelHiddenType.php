@@ -26,11 +26,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class ModelHiddenType extends AbstractType
 {
+    /**
+     * @param array<string, mixed> $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->addViewTransformer(new ModelToIdTransformer($options['model_manager'], $options['class']), true)
-        ;
+            ->addViewTransformer(new ModelToIdTransformer($options['model_manager'], $options['class']), true);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

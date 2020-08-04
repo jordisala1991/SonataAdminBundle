@@ -23,6 +23,8 @@ interface FilterPersisterInterface
 {
     /**
      * Get persisted filters for given admin.
+     *
+     * @return array<string, mixed>
      */
     public function get(string $adminCode): array;
 

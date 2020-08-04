@@ -21,7 +21,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 final class AuditManager implements AuditManagerInterface
 {
     /**
-     * @var array
+     * @var array<string, string[]>
      */
     private $readers = [];
 

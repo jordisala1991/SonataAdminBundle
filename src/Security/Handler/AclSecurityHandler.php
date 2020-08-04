@@ -48,17 +48,17 @@ final class AclSecurityHandler implements AclSecurityHandlerInterface
     private $aclProvider;
 
     /**
-     * @var array
+     * @var string[]
      */
     private $superAdminRoles = [];
 
     /**
-     * @var array
+     * @var string[]
      */
     private $adminPermissions = [];
 
     /**
-     * @var array
+     * @var string[]
      */
     private $objectPermissions = [];
 
@@ -81,6 +81,9 @@ final class AclSecurityHandler implements AclSecurityHandlerInterface
         $this->superAdminRoles = $superAdminRoles;
     }
 
+    /**
+     * @param string[] $permissions
+     */
     public function setAdminPermissions(array $permissions): void
     {
         $this->adminPermissions = $permissions;
@@ -91,6 +94,9 @@ final class AclSecurityHandler implements AclSecurityHandlerInterface
         return $this->adminPermissions;
     }
 
+    /**
+     * @param string[] $permissions
+     */
     public function setObjectPermissions(array $permissions): void
     {
         $this->objectPermissions = $permissions;
@@ -101,6 +107,9 @@ final class AclSecurityHandler implements AclSecurityHandlerInterface
         return $this->objectPermissions;
     }
 
+    /**
+     * @param string[]|string $attributes
+     */
     public function isGranted(AdminInterface $admin, $attributes, $object = null): bool
     {
         if (!\is_array($attributes)) {
@@ -265,6 +274,7 @@ final class AclSecurityHandler implements AclSecurityHandlerInterface
     }
 
     /**
+     * @param string[] $attributes
      * @param mixed|null $subject
      */
     private function isAnyGranted(array $attributes, $subject = null): bool

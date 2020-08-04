@@ -16,6 +16,7 @@ namespace Sonata\AdminBundle\Security\Handler;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Symfony\Component\Security\Acl\Model\AclInterface;
 use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
+use Symfony\Component\Security\Acl\Model\SecurityIdentityInterface;
 
 /**
  * @author Thomas Rabaix <thomas.rabaix@sonata-project.org>
@@ -24,21 +25,29 @@ interface AclSecurityHandlerInterface extends SecurityHandlerInterface
 {
     /**
      * Set the permissions not related to an object instance and also to be available when objects do not exist.
+     *
+     * @param string[] $permissions
      */
     public function setAdminPermissions(array $permissions): void;
 
     /**
      * Return the permissions not related to an object instance and also to be available when objects do not exist.
+     *
+     * @return string[]
      */
     public function getAdminPermissions(): array;
 
     /**
      * Set the permissions related to an object instance.
+     *
+     * @param string[] $permissions
      */
     public function setObjectPermissions(array $permissions): void;
 
     /**
      * Return the permissions related to an object instance.
+     *
+     * @return string[]
      */
     public function getObjectPermissions(): array;
 
@@ -50,8 +59,8 @@ interface AclSecurityHandlerInterface extends SecurityHandlerInterface
     /**
      * Find the ACLs for the passed object identities.
      *
-     * @param \Traversable $oids a collection of ObjectIdentityInterface implementations
-     * @param array        $sids an array of SecurityIdentityInterface implementations
+     * @param \Traversable<ObjectIdentityInterface> $oids
+     * @param SecurityIdentityInterface[] $sids
      *
      * @throws \Exception
      */
@@ -64,6 +73,8 @@ interface AclSecurityHandlerInterface extends SecurityHandlerInterface
 
     /**
      * Add the object class ACE's to the object ACL.
+     *
+     * @param array<string, mixed> $roleInformation
      */
     public function addObjectClassAces(AclInterface $acl, array $roleInformation = []): void;
 

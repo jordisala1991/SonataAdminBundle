@@ -31,6 +31,8 @@ interface AdminAclManipulatorInterface
     /**
      * Add the class ACE's to the admin ACL.
      *
+     * @param array<string, string[]> $roleInformation
+     *
      * @return bool TRUE if admin class ACEs are added, FALSE if not
      */
     public function addAdminClassAces(

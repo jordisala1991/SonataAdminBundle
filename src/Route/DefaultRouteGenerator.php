@@ -33,7 +33,7 @@ final class DefaultRouteGenerator implements RouteGeneratorInterface
     private $cache;
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     private $caches = [];
 

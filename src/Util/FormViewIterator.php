@@ -30,6 +30,9 @@ final class FormViewIterator implements \RecursiveIterator
         $this->iterator = $formView->getIterator();
     }
 
+    /**
+     * @return \RecursiveIterator<FormView>
+     */
     public function getChildren()
     {
         return new self($this->current());
@@ -40,6 +43,9 @@ final class FormViewIterator implements \RecursiveIterator
         return \count($this->current()->children) > 0;
     }
 
+    /**
+     * @return FormView|null
+     */
     public function current()
     {
         return $this->iterator->current();
@@ -55,7 +61,7 @@ final class FormViewIterator implements \RecursiveIterator
         return $this->current()->vars['id'];
     }
 
-    public function valid()
+    public function valid(): bool
     {
         return $this->iterator->valid();
     }

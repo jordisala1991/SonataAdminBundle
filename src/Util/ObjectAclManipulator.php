@@ -17,6 +17,7 @@ use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Security\Handler\AclSecurityHandlerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
+use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
 
 /**
  * @author Thomas Rabaix <thomas.rabaix@sonata-project.org>
@@ -28,7 +29,9 @@ abstract class ObjectAclManipulator implements ObjectAclManipulatorInterface
      *
      * @throws \Exception
      *
-     * @return array [countAdded, countUpdated]
+     * @param \Traversable<ObjectIdentityInterface> $oids
+     *
+     * @return array{0: int, 1:int} [countAdded, countUpdated]
      */
     public function configureAcls(
         OutputInterface $output,

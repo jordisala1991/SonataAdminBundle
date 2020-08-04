@@ -32,7 +32,7 @@ final class AdminPoolLoader extends Loader
     private $pool;
 
     /**
-     * @var array
+     * @var string[]
      */
     private $adminServiceIds = [];
 
@@ -41,6 +41,9 @@ final class AdminPoolLoader extends Loader
      */
     private $container;
 
+    /**
+     * @param string[] $adminServiceIds
+     */
     public function __construct(Pool $pool, array $adminServiceIds, ContainerInterface $container)
     {
         $this->pool = $pool;

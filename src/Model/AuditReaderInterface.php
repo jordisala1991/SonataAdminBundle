@@ -20,11 +20,20 @@ interface AuditReaderInterface
 {
     public function find(string $className, int $id, ?int $revision): ?object;
 
+    /**
+     * @return object[]
+     */
     public function findRevisionHistory(string $className, int $limit = 20, int $offset = 0): array;
 
     public function findRevision(string $classname, int $revision): object;
 
+    /**
+     * @return object[]
+     */
     public function findRevisions(string $className, int $id): array;
 
+    /**
+     * @return mixed[]
+     */
     public function diff(string $className, int $id, int $oldRevision, int $newRevision): array;
 }
