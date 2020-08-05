@@ -39,6 +39,8 @@ abstract class BaseGroupedMapper extends BaseMapper
      * Add new group or tab (if parameter "tab=true" is available in options).
      *
      * @throws \LogicException
+     *
+     * @param array<string, mixed> $options
      */
     public function with(string $name, array $options = []): self
     {
@@ -193,10 +195,14 @@ abstract class BaseGroupedMapper extends BaseMapper
 
     /**
      * Add new tab.
+     *
+     * @param array<string, mixed> $options
      */
     public function tab(string $name, array $options = []): self
     {
-        return $this->with($name, array_merge($options, ['tab' => true]));
+        $options['tab'] = true;
+
+        return $this->with($name, $options);
     }
 
     /**
@@ -229,18 +235,32 @@ abstract class BaseGroupedMapper extends BaseMapper
         return null !== $this->currentTab;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     abstract protected function getGroups(): array;
 
+    /**
+     * @return array<string, mixed>
+     */
     abstract protected function getTabs(): array;
 
+    /**
+     * @param array<string, mixed> $groups
+     */
     abstract protected function setGroups(array $groups): void;
 
+    /**
+     * @param array<string, mixed> $tabs
+     */
     abstract protected function setTabs(array $tabs): void;
 
     abstract protected function getName(): string;
 
     /**
      * Add the field name to the current group.
+     *
+     * @return array<string, mixed>
      */
     protected function addFieldToCurrentGroup(?string $fieldName): array
     {

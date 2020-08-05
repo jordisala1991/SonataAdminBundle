@@ -1,5 +1,6 @@
 includes:
     - phpstan-baseline.neon
+    - /Users/jsala/.composer/vendor/phpstan/phpstan-symfony/extension.neon
 
 parameters:
     level: 8

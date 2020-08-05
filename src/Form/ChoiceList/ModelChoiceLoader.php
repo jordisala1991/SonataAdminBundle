@@ -29,11 +29,6 @@ use Symfony\Component\PropertyAccess\PropertyPath;
 final class ModelChoiceLoader implements ChoiceLoaderInterface
 {
     /**
-     * @var array
-     */
-    public $identifier;
-
-    /**
      * @var ModelManagerInterface
      */
     private $modelManager;
@@ -49,7 +44,7 @@ final class ModelChoiceLoader implements ChoiceLoaderInterface
     private $query;
 
     /**
-     * @var array
+     * @var array<string, string[]>
      */
     private $choices;
 
@@ -83,8 +78,6 @@ final class ModelChoiceLoader implements ChoiceLoaderInterface
         $this->class = $class;
         $this->query = $query;
         $this->choices = $choices;
-
-        $this->identifier = $this->modelManager->getIdentifierFieldNames($this->class);
 
         // The property option defines, which property (path) is used for
         // displaying entities as strings

@@ -26,10 +26,13 @@ use Symfony\Component\Form\Guess\TypeGuess;
 final class TypeGuesserChain implements TypeGuesserInterface
 {
     /**
-     * @var array
+     * @var TypeGuesserInterface[]
      */
     private $guessers = [];
 
+    /**
+     * @param TypeGuesserInterface[] $guessers
+     */
     public function __construct(array $guessers)
     {
         foreach ($guessers as $guesser) {
