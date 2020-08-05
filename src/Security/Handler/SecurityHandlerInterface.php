@@ -22,7 +22,7 @@ interface SecurityHandlerInterface
 {
     /**
      * @param string|string[] $attributes
-     * @param mixed|null   $object
+     * @param mixed|null      $object
      */
     public function isGranted(AdminInterface $admin, $attributes, $object = null): bool;
 

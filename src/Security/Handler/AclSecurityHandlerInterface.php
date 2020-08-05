@@ -60,7 +60,7 @@ interface AclSecurityHandlerInterface extends SecurityHandlerInterface
      * Find the ACLs for the passed object identities.
      *
      * @param \Traversable<ObjectIdentityInterface> $oids
-     * @param SecurityIdentityInterface[] $sids
+     * @param SecurityIdentityInterface[]           $sids
      *
      * @throws \Exception
      */

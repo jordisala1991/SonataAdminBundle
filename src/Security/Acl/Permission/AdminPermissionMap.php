@@ -40,17 +40,17 @@ final class AdminPermissionMap implements PermissionMapInterface
      * fe. grant access for the view permission if the user has the edit permission.
      *
      * @var array{
-     *     'VIEW': int[],
-     *     'EDIT': int[],
-     *     'CREATE': int[],
-     *     'DELETE': int[],
-     *     'UNDELETE': int[],
-     *     'LIST': int[],
-     *     'EXPORT': int[],
-     *     'OPERATOR': int[],
-     *     'MASTER': int[],
-     *     'OWNER': int[],
-     * }
+     *             'VIEW': int[],
+     *             'EDIT': int[],
+     *             'CREATE': int[],
+     *             'DELETE': int[],
+     *             'UNDELETE': int[],
+     *             'LIST': int[],
+     *             'EXPORT': int[],
+     *             'OPERATOR': int[],
+     *             'MASTER': int[],
+     *             'OWNER': int[],
+     *             }
      */
     private $map = [
         self::PERMISSION_VIEW => [

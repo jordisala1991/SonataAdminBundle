@@ -37,7 +37,7 @@ final class FormBuilderIterator extends \RecursiveArrayIterator
 
     /**
      * @param FormBuilderInterface<mixed> $formBuilder
-     * @param string|false $prefix
+     * @param string|false                $prefix
      */
     public function __construct(FormBuilderInterface $formBuilder, $prefix = false)
     {

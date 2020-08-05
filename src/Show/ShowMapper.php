@@ -49,7 +49,7 @@ class ShowMapper extends BaseGroupedMapper
 
     /**
      * @param FieldDescriptionInterface|string $name
-     * @param array<string, mixed> $fieldDescriptionOptions
+     * @param array<string, mixed>             $fieldDescriptionOptions
      *
      * @throws \LogicException
      */

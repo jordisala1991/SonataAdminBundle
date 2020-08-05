@@ -30,10 +30,10 @@ interface RouteGeneratorInterface
      * @param array<string, mixed> $parameters
      *
      * @return array{
-     *     'route': string,
-     *     'routeParameters': array<string, mixed>,
-     *     'routeAbsolute': bool,
-     * }
+     *                'route': string,
+     *                'routeParameters': array<string, mixed>,
+     *                'routeAbsolute': bool,
+     *                }
      */
     public function generateMenuUrl(AdminInterface $admin, string $name, array $parameters = [], int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH): array;
 

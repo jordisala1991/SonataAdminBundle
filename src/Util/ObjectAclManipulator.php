@@ -27,9 +27,10 @@ abstract class ObjectAclManipulator implements ObjectAclManipulatorInterface
     /**
      * Configure the object ACL for the passed object identities.
      *
-     * @throws \Exception
      *
      * @param \Traversable<ObjectIdentityInterface> $oids
+     *
+     * @throws \Exception
      *
      * @return array{0: int, 1:int} [countAdded, countUpdated]
      */

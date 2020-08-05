@@ -274,7 +274,7 @@ final class AclSecurityHandler implements AclSecurityHandlerInterface
     }
 
     /**
-     * @param string[] $attributes
+     * @param string[]   $attributes
      * @param mixed|null $subject
      */
     private function isAnyGranted(array $attributes, $subject = null): bool
